@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iostream>
 
+#define EPS_CHECK 0.0001
+
 class SimpleFractions {
     public:
 

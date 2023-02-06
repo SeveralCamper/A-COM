@@ -17,7 +17,11 @@ SimpleFractions::SimpleFractions(double fraction) {
 }
 
 void SimpleFractions::printSimpleFraction() {
-    std::cout << std::fixed << numerator_ << '/' << denominator_ << ' ';
+    if (abs(numerator_) < EPS_CHECK) {
+        std::cout << std::fixed << 0.0f;
+    } else {
+        std::cout << std::fixed << numerator_ << '/' << denominator_;
+    }
 }
 
 void SimpleFractions::setNumenator(double new_numenator) {

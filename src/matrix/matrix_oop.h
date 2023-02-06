@@ -34,12 +34,12 @@ class Matrix {
   void SetElement(int i, int j, double data);
                        
   void RemoveMatrix();
-  void PrintSLAE() const;
+  void PrintSLAE(int model) const;
   void MemoryAllocation();  
   void PrintMatrix() const;                             
   void FillMatrix(double iterator);
 
-  void CalculateSLAE();
+  void CalculateSLAE(int model);
 
   void GetMatrix(std::string path);      
 
@@ -49,5 +49,6 @@ class Matrix {
 
   double FindAbsMaxElement(int shift, int pos);
 
+  void SetToIdentity();
   void AddingScalingFactors(int pos, int shift, double main_element);
 };

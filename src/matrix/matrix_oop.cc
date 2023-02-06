@@ -144,16 +144,34 @@ void Matrix::GetMatrix(std::string path) {
   matrix_file.close();
 }
 
-void Matrix::PrintSLAE() const {
+void Matrix::PrintSLAE(int model) const {
   for (int j = 0; j < rows_; j++) {
     for (int i = 0; i < cols_; i++) {
+      SimpleFractions simple_element(matrix_[j][i]);
       if (i == 0) {
-        std::cout << matrix_[j][i] << "x" << i + 1;
+        if (model == 1) {
+          std::cout << std::fixed;
+          simple_element.printSimpleFraction();
+          std::cout << "x" << i + 1;
+        } else {
+          std::cout << std::fixed << matrix_[j][i] << "x" << i + 1;
+        }
       } else {
         if (i == rows_) {
-          std::cout << " = " << matrix_[j][i];
+          if (model == 1) {
+            std::cout << " = ";
+            simple_element.printSimpleFraction();
+          } else {
+            std::cout << " = " << matrix_[j][i];
+          }
         } else {
-          std::cout << " + " << matrix_[j][i] << "x" << i + 1;
+          if (model == 1) {
+            std::cout << " + ";
+            simple_element.printSimpleFraction();
+            std::cout << "x" << i + 1;
+          } else {
+            std::cout << " + " << matrix_[j][i] << "x" << i + 1;
+          }
         }
       }
     }
@@ -186,24 +204,38 @@ double Matrix::FindAbsMaxElement(int shift, int pos) {
 
 void Matrix::AddingScalingFactors(int pos, int shift, double main_element) {
   double scaling_factor = 0;
-  PrintSLAE();
-  std::cout << "POS: " << pos << std::endl;
+  // PrintSLAE(1);
+  // std::cout << "POS: " << pos << std::endl;
   for (int i = 0; i <= rows_ - 1; i++) {
     scaling_factor = matrix_[i][pos] / main_element;
-    std::cout << matrix_[i][pos] << " / " << main_element << " = " << scaling_factor << std::endl;
+    // std::cout << matrix_[i][pos] << " / " << main_element << " = " << scaling_factor << std::endl;
     if (i != pos) {
       for (int j = 0; j < cols_; j++) {
-          std::cout << "!!! " << matrix_[i][j] << " = " << matrix_[i][j] << " - " << scaling_factor << " * " << matrix_[pos][j] << std::endl;
+          // std::cout << "!!! " << matrix_[i][j] << " = " << matrix_[i][j] << " - " << scaling_factor << " * " << matrix_[pos][j] << std::endl;
           matrix_[i][j] = matrix_[i][j] - scaling_factor * matrix_[pos][j];
       } 
     }
 
-    PrintSLAE();
+    // PrintSLAE(1);
     std::cout << std::endl;
   }
 }
 
-void Matrix::CalculateSLAE() {
+void Matrix::SetToIdentity() {
+  for (int i = 0; i < rows_; i++) {
+    double main_element = 1;
+    for (int j = 0; j < cols_; j++) {
+      if (i == j) {
+        main_element = matrix_[i][j];
+      }
+
+      matrix_[i][j] /= main_element;
+    }
+    main_element = 1;
+  }
+}
+
+void Matrix::CalculateSLAE(int model) {
   int min = 0, i = 0, j = 0;
   if (rows_ < cols_) {
     min = rows_;
@@ -214,9 +246,15 @@ void Matrix::CalculateSLAE() {
   while(i < min) {
     AddingScalingFactors(i, j, FindAbsMaxElement(i, j));
     std::cout << std::endl;
-    PrintSLAE();
+    PrintSLAE(model);
     i++;
     j++;
   }
+
+  std::cout << std::endl << "Set To Identity" << std::endl << std::endl;
+
+  SetToIdentity();
+
+  PrintSLAE(model);
 
 }
