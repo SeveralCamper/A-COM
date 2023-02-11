@@ -11,7 +11,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "../1_lab/simple_fractions.h"
+#include "../simple_fractions/simple_fractions.h"
 
 #define EPS 1e-7
 
@@ -50,5 +50,5 @@ class Matrix {
   double FindAbsMaxElement(int shift, int pos);
 
   void SetToIdentity();
-  void AddingScalingFactors(int pos, int shift, double main_element);
+  void AddingScalingFactors(int pos, double main_element);
 };

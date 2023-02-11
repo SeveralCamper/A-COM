@@ -139,6 +139,7 @@ void Matrix::RemoveMatrix() {
 
 void Matrix::GetMatrix(std::string path) {
   std::ifstream matrix_file(path);
+
   for (int i = 0; i < GetRows(); i++)
     for (int j = 0; j < GetCols(); j++) matrix_file >> matrix_[i][j];
   matrix_file.close();
@@ -202,7 +203,7 @@ double Matrix::FindAbsMaxElement(int shift, int pos) {
   return sign == 1 ? max_element * (-1) : max_element;
 }
 
-void Matrix::AddingScalingFactors(int pos, int shift, double main_element) {
+void Matrix::AddingScalingFactors(int pos, double main_element) {
   double scaling_factor = 0;
   // PrintSLAE(1);
   // std::cout << "POS: " << pos << std::endl;
@@ -244,7 +245,7 @@ void Matrix::CalculateSLAE(int model) {
   }
 
   while(i < min) {
-    AddingScalingFactors(i, j, FindAbsMaxElement(i, j));
+    AddingScalingFactors(i, FindAbsMaxElement(i, j));
     std::cout << std::endl;
     PrintSLAE(model);
     i++;
