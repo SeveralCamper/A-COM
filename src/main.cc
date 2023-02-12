@@ -10,8 +10,9 @@ int main() {
 
     std::cin >> model;
 
-    Matrix new_matrix(5, 6);
-    new_matrix.GetMatrix("../files/SLAE.txt");
+    Matrix new_matrix(3, 5);
+    new_matrix.PrintMatrix();
+    new_matrix.GetMatrix("../files/SLAE_4.txt");
     new_matrix.PrintMatrix();
 
     if (model == 1 || model == 2) {

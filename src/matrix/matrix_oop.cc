@@ -35,6 +35,7 @@ double Matrix::operator()(int i, int j) const {
 // public
 
 void Matrix::PrintMatrix() const {
+  std::cout << "!!!!! " << rows_ << " ! " << cols_ << std::endl;
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_; j++) {
       if (j == 0) {
@@ -208,7 +209,9 @@ void Matrix::AddingScalingFactors(int pos, double main_element) {
   // PrintSLAE(1);
   // std::cout << "POS: " << pos << std::endl;
   for (int i = 0; i <= rows_ - 1; i++) {
-    scaling_factor = matrix_[i][pos] / main_element;
+    if (main_element != 0) {
+      scaling_factor = matrix_[i][pos] / main_element;
+    }
     // std::cout << matrix_[i][pos] << " / " << main_element << " = " << scaling_factor << std::endl;
     if (i != pos) {
       for (int j = 0; j < cols_; j++) {
@@ -229,8 +232,9 @@ void Matrix::SetToIdentity() {
       if (i == j) {
         main_element = matrix_[i][j];
       }
-
-      matrix_[i][j] /= main_element;
+      if (main_element != 0) {
+        matrix_[i][j] /= main_element;
+      }
     }
     main_element = 1;
   }
@@ -256,6 +260,36 @@ void Matrix::CalculateSLAE(int model) {
 
   SetToIdentity();
 
-  PrintSLAE(model);
+  if (PostProcessing()) {
+    std::cout << "The matrix has not any solutions" << std::endl;
+  } else {
+    PrintSLAE(model); 
+  }
+}
 
+bool Matrix::PostProcessing() {
+  bool flag_zero_row = 1, flag_zero = 1, res = 0;
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_ - 1; j++) {
+      if (matrix_[i][j] != 0) {
+        flag_zero = 0;
+        flag_zero_row = 0;
+        break;
+      }
+    }
+    std::cout << flag_zero_row << "FLAG" << std::endl;
+    if (flag_zero_row == 1) {
+      if (matrix_[i][cols_ - 1] == 0) {
+        res = 0;
+        break;
+      } else if (matrix_[i][cols_ - 1] != 0 ) {
+        res = 1;
+        break;
+      }
+    }
+    flag_zero = 1;
+    flag_zero_row = 1;
+  }
+
+  return res;
 }
