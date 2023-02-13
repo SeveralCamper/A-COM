@@ -51,6 +51,7 @@ class Matrix {
 
   int PostProcessing(int *row_for_del);
 
+  void PrintResault();
   void SetToIdentity();
   void AddingScalingFactors(int pos, double main_element);
 };

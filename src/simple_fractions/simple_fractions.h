@@ -26,6 +26,7 @@ class SimpleFractions {
         SimpleFractions(double fraction);
         ~SimpleFractions() {}
 
+         void ReduceFraction();
         void printSimpleFraction();
         void setNumenator(long long int new_numenator);
         void setDenominator(long long int new_denominator);
@@ -33,6 +34,9 @@ class SimpleFractions {
         long long getNumenator();
         long long getDenominator();
         double convertToDouble();
+
+        long long int SearchNOK(long long int n1, long long int n2);
+        long long int SearchNOD(long long int n1, long long int n2);
 
     private:
         long long int numerator_;

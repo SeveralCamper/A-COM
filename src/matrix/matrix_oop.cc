@@ -167,12 +167,16 @@ void Matrix::PrintSLAE(int model) const {
             std::cout << " = " << matrix_[j][i];
           }
         } else {
-          if (model == 1) {
-            std::cout << " + ";
-            simple_element.printSimpleFraction();
-            std::cout << "x" << i + 1;
+          if (i == cols_ - 1) {
+            std::cout << " + " << matrix_[j][i];
           } else {
-            std::cout << " + " << matrix_[j][i] << "x" << i + 1;
+            if (model == 1) {
+              std::cout << " + ";
+              simple_element.printSimpleFraction();
+              std::cout << "x" << i + 1;
+            } else {
+              std::cout << " + " << matrix_[j][i] << "x" << i + 1;
+            }
           }
         }
       }
@@ -264,7 +268,6 @@ void Matrix::CalculateSLAE(int model) {
   if (post_res == 2) {
     std::cout << "The matrix has not any solutions" << std::endl;
   } else if (post_res == 1) {
-    std::cout <<  "1 is here!" << std::endl;
     int i_new = 0, j_new = 0;
     Matrix new_matrix(rows_ - 1, cols_);
     for (int i = 0; i < GetRows(); i++) {
@@ -278,10 +281,14 @@ void Matrix::CalculateSLAE(int model) {
       i_new++;
       j_new = 0; 
     }
-    new_matrix.PrintSLAE(model); 
+    new_matrix.PrintSLAE(model);
+    std::cout << std::endl; 
+    PrintResault();
   } else {
-    std::cout <<  "normal is here!" << std::endl;
     PrintSLAE(model);
+    std::cout << std::endl;
+    PrintResault();
+    std::cout << std::endl;
   }
 }
 
@@ -311,4 +318,48 @@ int Matrix::PostProcessing(int *row_for_del) {
   }
 
   return res;
+}
+
+void Matrix::PrintResault() {
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_; j++) {
+      if (matrix_[i][j] > -1 && matrix_[i][j] < 1) {
+        if (matrix_[i][j] < 0) {
+          matrix_[i][j ]*= -1;
+        }
+      }
+    }
+  }
+
+  int count = 0;
+  int flag = 0;
+
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_; j++) {
+      if ((matrix_[i][j] - EPS > 0 || matrix_[i][j] < 0) && flag != 1) {
+        if (i == j) {
+          std::cout << matrix_[i][j] << "x" << j + 1 << " = ";
+        } else {
+          if (j + 1 != cols_) {
+            if (count == 0) {
+              std::cout << matrix_[i][j] << "x" << j + 1; 
+            } else {
+              std::cout << " + " << matrix_[i][j] << "x" << j + 1; 
+            }
+          } else {
+            std::cout << matrix_[i][j]; 
+          }
+        }
+      } else if (i == j) {
+        std::cout << i << " ! " << j << std::endl;
+        while (matrix_[i][j] - EPS > 0) {
+          j++;
+        }
+        std::cout << i << " ! " << j << std::endl;
+        std::cout << matrix_[i][j] << "x" << j + 1 << " = ";
+        flag = 1;
+      }
+    }
+    std::cout << std::endl;
+  }
 }
