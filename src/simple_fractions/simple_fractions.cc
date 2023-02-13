@@ -9,7 +9,7 @@ void SimpleFractions::operator+=(const SimpleFractions& other) {
     if (denominator_ == other.denominator_) {
         numerator_ += other.numerator_;
     } else {
-
+        
     }
 }
 

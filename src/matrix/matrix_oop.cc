@@ -205,7 +205,7 @@ double Matrix::FindAbsMaxElement(int shift, int pos) {
 }
 
 void Matrix::AddingScalingFactors(int pos, double main_element) {
-  double scaling_factor = 0;
+  double scaling_factor = 1;
   // PrintSLAE(1);
   // std::cout << "POS: " << pos << std::endl;
   for (int i = 0; i <= rows_ - 1; i++) {
@@ -215,13 +215,13 @@ void Matrix::AddingScalingFactors(int pos, double main_element) {
     // std::cout << matrix_[i][pos] << " / " << main_element << " = " << scaling_factor << std::endl;
     if (i != pos) {
       for (int j = 0; j < cols_; j++) {
-          // std::cout << "!!! " << matrix_[i][j] << " = " << matrix_[i][j] << " - " << scaling_factor << " * " << matrix_[pos][j] << std::endl;
-          matrix_[i][j] = matrix_[i][j] - scaling_factor * matrix_[pos][j];
+        // std::cout << "!!! " << matrix_[i][j] << " = " << matrix_[i][j] << " - " << scaling_factor << " * " << matrix_[pos][j] << std::endl;
+        matrix_[i][j] = matrix_[i][j] - scaling_factor * matrix_[pos][j];
       } 
     }
 
-    // PrintSLAE(1);
-    std::cout << std::endl;
+    //PrintSLAE(1);
+    //std::cout << std::endl;
   }
 }
 
@@ -260,15 +260,34 @@ void Matrix::CalculateSLAE(int model) {
 
   SetToIdentity();
 
-  if (PostProcessing()) {
+  int row_for_del = -1, post_res = PostProcessing(&row_for_del);
+  if (post_res == 2) {
     std::cout << "The matrix has not any solutions" << std::endl;
+  } else if (post_res == 1) {
+    std::cout <<  "1 is here!" << std::endl;
+    int i_new = 0, j_new = 0;
+    Matrix new_matrix(rows_ - 1, cols_);
+    for (int i = 0; i < GetRows(); i++) {
+      if (row_for_del == i) {
+        continue;
+      }
+      for (int j = 0; j < GetCols(); j++) {
+        new_matrix.SetElement(i_new, j_new, matrix_[i][j]);
+        j_new++;
+      }
+      i_new++;
+      j_new = 0; 
+    }
+    new_matrix.PrintSLAE(model); 
   } else {
-    PrintSLAE(model); 
+    std::cout <<  "normal is here!" << std::endl;
+    PrintSLAE(model);
   }
 }
 
-bool Matrix::PostProcessing() {
-  bool flag_zero_row = 1, flag_zero = 1, res = 0;
+int Matrix::PostProcessing(int *row_for_del) {
+  bool flag_zero_row = 1, flag_zero = 1;
+  int res = 0;
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_ - 1; j++) {
       if (matrix_[i][j] != 0) {
@@ -277,13 +296,13 @@ bool Matrix::PostProcessing() {
         break;
       }
     }
-    std::cout << flag_zero_row << "FLAG" << std::endl;
     if (flag_zero_row == 1) {
       if (matrix_[i][cols_ - 1] == 0) {
-        res = 0;
+        res = 1;
+        *row_for_del = i;
         break;
       } else if (matrix_[i][cols_ - 1] != 0 ) {
-        res = 1;
+        res = 2;
         break;
       }
     }

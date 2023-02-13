@@ -49,7 +49,7 @@ class Matrix {
 
   double FindAbsMaxElement(int shift, int pos);
 
-  bool PostProcessing();
+  int PostProcessing(int *row_for_del);
 
   void SetToIdentity();
   void AddingScalingFactors(int pos, double main_element);
