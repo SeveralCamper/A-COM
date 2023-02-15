@@ -10,30 +10,25 @@ int main() {
     std::cout << "2. Double." << std::endl;
 
     // std::cin >> model;
+    SimpleFractions frac(-2.54), frac_2(-2.55);
+    frac.ReduceFraction();
+    frac.PrintSimpleFraction();
+    std::cout << std::endl;
+    frac = frac.AbsFraction();
+    frac.PrintSimpleFraction();
+
+    if (frac > frac_2) {
+        std::cout << "YYYYYYYYYYYYYYYYYYYYYYYYYYYEU" << std::endl;
+    }
 
     Matrix new_matrix(3,5);
     new_matrix.GetMatrix("../files/SLAE_3.txt");
     new_matrix.PrintMatrix();
 
-    double gap = 2.0;
-    SimpleFractions gap_frac(gap);
-    std::vector<SimpleFractions> vec;
-    for (int i = 0; i < 5; i++) {
-        vec.push_back(gap_frac);
-    }
-
-    for (int i = 0; i < 5; i++) {
-        std::cout << std::endl;
-        vec[i].PrintSimpleFraction();
-        std::cout << std::endl;
-    }
-
     /* MatrixFractions new_matrix_frac(5, 5);
     new_matrix_frac.GetMatrix("../files/SLAE.txt");
     new_matrix_frac.PrintMatrix();
-    std::cout << "!" << std::endl;
     new_matrix_frac.ReduceMatrix();
-    std::cout << "!" << std::endl;
     new_matrix_frac.PrintMatrix(); */
 
     /* if (model == 1) {

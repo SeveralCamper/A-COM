@@ -48,7 +48,7 @@ class MatrixFractions {
   int rows_, cols_;
   std::vector<std::vector<SimpleFractions>> matrix_;
 
-  double FindAbsMaxElement(int shift, int pos);
+  SimpleFractions FindAbsMaxElement(int shift, int pos);
 
   int PostProcessing(int *row_for_del);
 

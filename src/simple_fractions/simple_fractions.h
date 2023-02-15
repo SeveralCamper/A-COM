@@ -18,7 +18,11 @@ class SimpleFractions {
         SimpleFractions operator*(const SimpleFractions& other);
         void operator/=(const SimpleFractions& other);
         SimpleFractions operator/(const SimpleFractions& other);
+        
+        bool operator>(const SimpleFractions& other);
+        bool operator<(const SimpleFractions& other);
 
+        SimpleFractions AbsFraction();
 
         SimpleFractions() = delete;
         SimpleFractions(long long int numerator, long long int denominator) : numerator_(numerator),

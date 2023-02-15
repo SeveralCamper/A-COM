@@ -1,5 +1,12 @@
 #include "matrix_fraction.h"
 
+SimpleFractions MatrixFractions::operator()(int i, int j) const {
+  if ((i < 0 || i > rows_) || j < 0 || j > cols_) {
+    throw std::out_of_range("Incorrect input, index is out of range");
+  }
+  return matrix_[i][j];
+}
+
 MatrixFractions::MatrixFractions() {
   cols_ = 1;
   rows_ = 1;
@@ -32,12 +39,8 @@ void MatrixFractions::RemoveMatrix() {
 
 void MatrixFractions::ReduceMatrix() {
   for (int i = 0; i < rows_; i++) {
-    std::cout << "helay" << std::endl;
     for (int j = 0; j < cols_; j++) {
-        matrix_[i][j].PrintSimpleFraction();
-        std::cout << "haloy" << std::endl;
-        matrix_[i][j] += matrix_[i][j];
-        matrix_[i][j].PrintSimpleFraction();
+        matrix_[i][j].ReduceFraction();
     }
   }
 }
@@ -60,6 +63,7 @@ void MatrixFractions::PrintMatrix() {
     for (int j = 0; j < cols_; j++) {
       if (j == 0) {
         matrix_[i][j].PrintSimpleFraction();
+        std::cout << std::setw(16);
       } else {
         std::cout << std::setw(16);
         matrix_[i][j].PrintSimpleFraction();
@@ -67,6 +71,20 @@ void MatrixFractions::PrintMatrix() {
     }
     std::cout << std::endl;
   }
+}
+
+SimpleFractions MatrixFractions::GetElement(int i, int j) const {
+  if ((i < 0 || i >= rows_) || (j < 0 || j >= cols_)) {
+    throw std::out_of_range("Incorrect input, index is out of range");
+  }
+  return matrix_[i][j];
+}
+
+void MatrixFractions::SetElement(int i, int j, SimpleFractions value) {
+  if ((i < 0 || i >= rows_) || (j < 0 || j >= cols_)) {
+    throw std::out_of_range("Incorrect input, index is out of range");
+  }
+  matrix_[i][j] = value;
 }
 
 int MatrixFractions::GetRows() const { return rows_; }
@@ -87,3 +105,63 @@ void MatrixFractions::GetMatrix(std::string path) {
   }
   matrix_file.close();
 }
+
+SimpleFractions MatrixFractions::FindAbsMaxElement(int shift, int pos) {
+  bool sign = 0;
+  SimpleFractions max_element(-LONG_LONG_MAX, 1);
+  int max_element_pos = 0;
+  for (int i = shift; i < rows_; i++) {
+    if (matrix_[i][pos].AbsFraction() > max_element) {
+      if (matrix_[i][pos] < 0) {
+        sign = 1;
+      } else {
+        sign = 0;
+      }
+      max_element_pos = i;
+      max_element = matrix_[i][pos].AbsFraction();
+    }
+  }
+
+  for (int i = shift; i < cols_; i++) {
+    std::swap(matrix_[pos][i], matrix_[max_element_pos][i]);
+  }
+
+  return sign == 1 ? max_element * (-1) : max_element;
+}
+
+/* void MatrixFractions::AddingScalingFactors(int pos, double main_element) {
+  double scaling_factor = 1;
+  for (int i = 0; i <= rows_ - 1; i++) {
+    if (main_element != 0) {
+      scaling_factor = matrix_[i][pos] / main_element;
+    }
+    if (i != pos) {
+      for (int j = 0; j < cols_; j++) {
+        matrix_[i][j] = matrix_[i][j] - scaling_factor * matrix_[pos][j];
+      } 
+    }
+  }
+}
+
+void MatrixFractions::CalculateSLAE(int model) {
+  int min = 0, i = 0, j = 0;
+  if (rows_ < cols_) {
+    min = rows_;
+  } else {
+    min = cols_;
+  }
+
+  while(i < min) {
+    AddingScalingFactors(i, FindAbsMaxElement(i, j));
+    std::cout << std::endl;
+    PrintSLAE(model);
+    i++;
+    j++;
+  }
+
+  std::cout << std::endl << "Set To Identity" << std::endl << std::endl;
+
+  SetToIdentity();
+
+  PrintSLAE(model);
+} */

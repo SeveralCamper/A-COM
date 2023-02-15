@@ -5,6 +5,11 @@ SimpleFractions& SimpleFractions::operator=(const SimpleFractions& other) {
     denominator_ = other.denominator_;
 }
 
+SimpleFractions SimpleFractions::AbsFraction() {
+    SimpleFractions new_frac(abs(this->numerator_), abs(this->denominator_));
+    return new_frac;
+}
+
 void SimpleFractions::operator+=(const SimpleFractions& other) {
     if (denominator_ == other.denominator_) {
         numerator_ += other.numerator_;
@@ -63,6 +68,32 @@ SimpleFractions SimpleFractions::operator/(const SimpleFractions& other) {
     return new_frac;
 }
 
+bool SimpleFractions::operator>(const SimpleFractions& other) {
+    bool res = 0;
+    double res_first = (double)this->numerator_ / (double)this->denominator_;
+    double res_second =  (double)other.numerator_ / (double)other.denominator_;
+    std::cout << std::endl;
+    std::cout << res_first << " " << res_second << std::endl;
+    std::cout << std::endl;
+    if (res_first > res_second) {
+        res = 1;
+    }
+
+    return res;
+}
+
+bool SimpleFractions::operator<(const SimpleFractions& other) {
+    bool res = 0;
+    double res_first = (double)this->numerator_ / (double)this->denominator_;
+    double res_second =  (double)other.numerator_ / (double)other.denominator_;
+    std::cout << res_first << " " << res_second << std::endl;
+    if (res_first < res_second) {
+        res = 1;
+    }
+
+    return res;
+}
+
 void SimpleFractions::ReduceFraction() {
     long long int NOD = SearchNOD(numerator_, denominator_);
     numerator_ /= NOD;
@@ -73,12 +104,9 @@ SimpleFractions::SimpleFractions(double fraction) {
     int num = 0;
     double numerator_d = 0, denominator = 0;
     long long int numerator = 0;
-    std::cout << fraction << std::endl;
 
     denominator = modf(fraction, &numerator_d);
     numerator = numerator_d;
-    std::cout << "!!! !!!" << numerator << std::endl;
-    std::cout << "!!! !!!" << denominator << std::endl;
     std::stringstream ss;
     ss << std::setprecision(8) <<  fraction;
     std::string strNum = ss.str();
@@ -87,8 +115,6 @@ SimpleFractions::SimpleFractions(double fraction) {
         denominator *= 10;
         num++;
     }
-    std::cout << "NUMENATOR: " << numerator * pow(10, num) << std::endl;
-    std::cout << "DENUMENATOR: " << denominator << std::endl;
     numerator_ = numerator * pow(10, num) + denominator;
     denominator_ = pow(10, num);
 }
@@ -125,15 +151,22 @@ double SimpleFractions::ConvertToDouble() {
 
 long long int SimpleFractions::SearchNOD(long long int n1, long long int n2) {
   long long int div;
-  if (n1 == n2)  return n1;
-  long long int d = n1 - n2;
+  if (abs(n1) == abs(n2))  return n1;
+  long long int d;
+  if (n1 < 0) {
+    d = -n1 - n2;
+  } else {
+    d = n1 - n2;
+  }
+
   if (d < 0) {
     d = -d;  div = SearchNOD(n1, d);
-  } else
-    div = SearchNOD(n2, d); 
+  } else {
+    div = SearchNOD(n2, d);
+  } 
   return div;
 }
 
-long long int SimpleFractions::SearchNOK(long long int n1, long long int n2) { 
+long long int SimpleFractions::SearchNOK(long long int n1, long long int n2) {
   return n1*n2 / SearchNOD(n1, n2); 
 }
