@@ -71,24 +71,29 @@ void SimpleFractions::ReduceFraction() {
 
 SimpleFractions::SimpleFractions(double fraction) {
     int num = 0;
-    double numerator_d = 0;
-    long long int numerator = 0, denominator = 0;
+    double numerator_d = 0, denominator = 0;
+    long long int numerator = 0;
+    std::cout << fraction << std::endl;
 
     denominator = modf(fraction, &numerator_d);
     numerator = numerator_d;
+    std::cout << "!!! !!!" << numerator << std::endl;
+    std::cout << "!!! !!!" << denominator << std::endl;
     std::stringstream ss;
     ss << std::setprecision(8) <<  fraction;
     std::string strNum = ss.str();
     size_t pos = strNum.find('.');
     for (auto i = 0; i < strNum.size() - 1 - pos; i++) {
         denominator *= 10;
-        num = (int) i;
+        num++;
     }
+    std::cout << "NUMENATOR: " << numerator * pow(10, num) << std::endl;
+    std::cout << "DENUMENATOR: " << denominator << std::endl;
     numerator_ = numerator * pow(10, num) + denominator;
     denominator_ = pow(10, num);
 }
 
-void SimpleFractions::printSimpleFraction() {
+void SimpleFractions::PrintSimpleFraction() {
     if (abs(numerator_) < EPS_CHECK) {
         std::cout << std::fixed << 0.0f;
     } else {
@@ -96,24 +101,26 @@ void SimpleFractions::printSimpleFraction() {
     }
 }
 
-void SimpleFractions::setNumenator(long long int new_numenator) {
+void SimpleFractions::SetNumenator(long long int new_numenator) {
     numerator_ = new_numenator;
 }
 
-void SimpleFractions::setDenominator(long long int new_denominator) {
+void SimpleFractions::SetDenominator(long long int new_denominator) {
     denominator_ = new_denominator;
 }
 
-long long SimpleFractions::getNumenator() {
+long long SimpleFractions::GetNumenator() {
     return numerator_;
 }
 
-long long SimpleFractions::getDenominator() {
+long long SimpleFractions::GetDenominator() {
     return denominator_;
 }
 
-double SimpleFractions::convertToDouble() {
-    return numerator_ / denominator_;
+double SimpleFractions::ConvertToDouble() {
+    double num = numerator_ / denominator_;
+    long long int denum = numerator_ % denominator_;
+    return num + denum;
 }
 
 long long int SimpleFractions::SearchNOD(long long int n1, long long int n2) {

@@ -26,14 +26,14 @@ class SimpleFractions {
         SimpleFractions(double fraction);
         ~SimpleFractions() {}
 
-         void ReduceFraction();
-        void printSimpleFraction();
-        void setNumenator(long long int new_numenator);
-        void setDenominator(long long int new_denominator);
+        void ReduceFraction();
+        void PrintSimpleFraction();
+        void SetNumenator(long long int new_numenator);
+        void SetDenominator(long long int new_denominator);
 
-        long long getNumenator();
-        long long getDenominator();
-        double convertToDouble();
+        long long GetNumenator();
+        long long GetDenominator();
+        double ConvertToDouble();
 
         long long int SearchNOK(long long int n1, long long int n2);
         long long int SearchNOD(long long int n1, long long int n2);

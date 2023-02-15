@@ -153,7 +153,7 @@ void Matrix::PrintSLAE(int model) const {
       if (i == 0) {
         if (model == 1) {
           std::cout << std::fixed;
-          simple_element.printSimpleFraction();
+          simple_element.PrintSimpleFraction();
           std::cout << "x" << i + 1;
         } else {
           std::cout << std::fixed << matrix_[j][i] << "x" << i + 1;
@@ -162,7 +162,7 @@ void Matrix::PrintSLAE(int model) const {
         if (i == rows_) {
           if (model == 1) {
             std::cout << " = ";
-            simple_element.printSimpleFraction();
+            simple_element.PrintSimpleFraction();
           } else {
             std::cout << " = " << matrix_[j][i];
           }
@@ -172,7 +172,7 @@ void Matrix::PrintSLAE(int model) const {
           } else {
             if (model == 1) {
               std::cout << " + ";
-              simple_element.printSimpleFraction();
+              simple_element.PrintSimpleFraction();
               std::cout << "x" << i + 1;
             } else {
               std::cout << " + " << matrix_[j][i] << "x" << i + 1;

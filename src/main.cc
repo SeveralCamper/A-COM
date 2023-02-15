@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "matrix/matrix_oop.h"
+#include "matrix_fraction/matrix_fraction.h"
 
 int main() {
     int  model = 0;
@@ -8,25 +9,34 @@ int main() {
     std::cout << "1. Simple fractions." << std::endl;
     std::cout << "2. Double." << std::endl;
 
-    std::cin >> model;
-
-    /* SimpleFractions frac(4, 7);
-    SimpleFractions frac_2(2, 5);
-    frac.printSimpleFraction();
-    std::cout << std::endl;
-
-    frac /= frac_2;
-    frac.ReduceFraction();
-    frac.printSimpleFraction();
-    SimpleFractions frac_3(3.5);
-    frac_2 = frac_2 - frac * frac_3;
-    frac_2.printSimpleFraction(); */
+    // std::cin >> model;
 
     Matrix new_matrix(3,5);
     new_matrix.GetMatrix("../files/SLAE_3.txt");
     new_matrix.PrintMatrix();
 
-    if (model == 1) {
+    double gap = 2.0;
+    SimpleFractions gap_frac(gap);
+    std::vector<SimpleFractions> vec;
+    for (int i = 0; i < 5; i++) {
+        vec.push_back(gap_frac);
+    }
+
+    for (int i = 0; i < 5; i++) {
+        std::cout << std::endl;
+        vec[i].PrintSimpleFraction();
+        std::cout << std::endl;
+    }
+
+    /* MatrixFractions new_matrix_frac(5, 5);
+    new_matrix_frac.GetMatrix("../files/SLAE.txt");
+    new_matrix_frac.PrintMatrix();
+    std::cout << "!" << std::endl;
+    new_matrix_frac.ReduceMatrix();
+    std::cout << "!" << std::endl;
+    new_matrix_frac.PrintMatrix(); */
+
+    /* if (model == 1) {
         std::cout << std::endl;
         new_matrix.PrintSLAE(model);
         std::cout << std::endl << std::endl;;
@@ -37,7 +47,7 @@ int main() {
         new_matrix.CalculateSLAE(model);
     } else {
         std::cout << "Invalid input! Please enter view model from 0 to 1" << std::endl;
-    }
+    } */
 
     return 0;
 }
