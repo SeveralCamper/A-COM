@@ -21,12 +21,12 @@ class SimpleFractions {
         
         bool operator>(const SimpleFractions& other);
         bool operator<(const SimpleFractions& other);
+        bool operator!=(const SimpleFractions& other);
 
         SimpleFractions AbsFraction();
 
         SimpleFractions() = delete;
-        SimpleFractions(long long int numerator, long long int denominator) : numerator_(numerator),
-            denominator_(denominator) {}
+        SimpleFractions(long long int numerator, long long int denominator);
         SimpleFractions(double fraction);
         ~SimpleFractions() {}
 

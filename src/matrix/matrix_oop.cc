@@ -149,6 +149,7 @@ void Matrix::GetMatrix(std::string path) {
 void Matrix::PrintSLAE(int model) const {
   for (int j = 0; j < rows_; j++) {
     for (int i = 0; i < cols_; i++) {
+      std::cout << "POS: " << i << " " << j << std::endl;
       SimpleFractions simple_element(matrix_[j][i]);
       if (i == 0) {
         if (model == 1) {

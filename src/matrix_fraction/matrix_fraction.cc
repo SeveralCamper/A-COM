@@ -50,7 +50,7 @@ void MatrixFractions::FillMatrix(double iterator) {
   for (int i = 0; i < rows_; i++) {
     std::vector<SimpleFractions> vec;
     for (int j = 0; j < cols_; j++) {
-      SimpleFractions frac(iter);
+      SimpleFractions frac(0, 1);
       vec.push_back(frac);
       iter += iterator;
     }
@@ -108,11 +108,11 @@ void MatrixFractions::GetMatrix(std::string path) {
 
 SimpleFractions MatrixFractions::FindAbsMaxElement(int shift, int pos) {
   bool sign = 0;
-  SimpleFractions max_element(-LONG_LONG_MAX, 1);
+  SimpleFractions max_element(-LONG_LONG_MAX, 1), zero(0, 1), minus_one(-1, 1);
   int max_element_pos = 0;
   for (int i = shift; i < rows_; i++) {
     if (matrix_[i][pos].AbsFraction() > max_element) {
-      if (matrix_[i][pos] < 0) {
+      if (matrix_[i][pos] < zero) {
         sign = 1;
       } else {
         sign = 0;
@@ -126,24 +126,44 @@ SimpleFractions MatrixFractions::FindAbsMaxElement(int shift, int pos) {
     std::swap(matrix_[pos][i], matrix_[max_element_pos][i]);
   }
 
-  return sign == 1 ? max_element * (-1) : max_element;
+  return sign == 1 ? max_element * minus_one : max_element;
 }
 
-/* void MatrixFractions::AddingScalingFactors(int pos, double main_element) {
-  double scaling_factor = 1;
+void MatrixFractions::AddingScalingFactors(int pos, SimpleFractions main_element) {
+  SimpleFractions scaling_factor(0, 1), zero(0, 1);
   for (int i = 0; i <= rows_ - 1; i++) {
-    if (main_element != 0) {
+    if (main_element != zero) {
       scaling_factor = matrix_[i][pos] / main_element;
+      scaling_factor.ReduceFraction();
     }
+
     if (i != pos) {
       for (int j = 0; j < cols_; j++) {
+        matrix_[i][j].ReduceFraction();
+        matrix_[pos][j].ReduceFraction();
         matrix_[i][j] = matrix_[i][j] - scaling_factor * matrix_[pos][j];
       } 
     }
   }
 }
 
-void MatrixFractions::CalculateSLAE(int model) {
+void MatrixFractions::SetToIdentity() {
+  for (int i = 0; i < rows_; i++) {
+    SimpleFractions main_element(1, 1);
+    for (int j = 0; j < cols_; j++) {
+      if (i == j) {
+        main_element = matrix_[i][j];
+      }
+      if (main_element != 0) {
+        matrix_[i][j] /= main_element;
+      }
+    }
+    main_element.SetNumenator(1);
+    main_element.SetDenominator(1);
+  }
+}
+
+void MatrixFractions::CalculateSLAE() {
   int min = 0, i = 0, j = 0;
   if (rows_ < cols_) {
     min = rows_;
@@ -151,10 +171,11 @@ void MatrixFractions::CalculateSLAE(int model) {
     min = cols_;
   }
 
+  std::cout << min << std::endl;
   while(i < min) {
     AddingScalingFactors(i, FindAbsMaxElement(i, j));
-    std::cout << std::endl;
-    PrintSLAE(model);
+    ReduceMatrix();
+    PrintMatrix();
     i++;
     j++;
   }
@@ -163,5 +184,5 @@ void MatrixFractions::CalculateSLAE(int model) {
 
   SetToIdentity();
 
-  PrintSLAE(model);
-} */
+  PrintMatrix();
+}
