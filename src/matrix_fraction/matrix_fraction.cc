@@ -71,6 +71,7 @@ void MatrixFractions::PrintMatrix() {
     }
     std::cout << std::endl;
   }
+  std::cout << std::endl;
 }
 
 SimpleFractions MatrixFractions::GetElement(int i, int j) const {
@@ -130,8 +131,8 @@ SimpleFractions MatrixFractions::FindAbsMaxElement(int shift, int pos) {
 }
 
 void MatrixFractions::AddingScalingFactors(int pos, SimpleFractions main_element) {
-  SimpleFractions scaling_factor(0, 1), zero(0, 1);
-  for (int i = 0; i <= rows_ - 1; i++) {
+  SimpleFractions scaling_factor(1, 1), zero(0, 1);
+  for (int i = 0; i < rows_; i++) {
     if (main_element != zero) {
       scaling_factor = matrix_[i][pos] / main_element;
       scaling_factor.ReduceFraction();
@@ -139,8 +140,6 @@ void MatrixFractions::AddingScalingFactors(int pos, SimpleFractions main_element
 
     if (i != pos) {
       for (int j = 0; j < cols_; j++) {
-        matrix_[i][j].ReduceFraction();
-        matrix_[pos][j].ReduceFraction();
         matrix_[i][j] = matrix_[i][j] - scaling_factor * matrix_[pos][j];
       } 
     }
@@ -171,11 +170,11 @@ void MatrixFractions::CalculateSLAE() {
     min = cols_;
   }
 
-  std::cout << min << std::endl;
   while(i < min) {
     AddingScalingFactors(i, FindAbsMaxElement(i, j));
     ReduceMatrix();
     PrintMatrix();
+    std::cout << std::endl;
     i++;
     j++;
   }
@@ -184,5 +183,56 @@ void MatrixFractions::CalculateSLAE() {
 
   SetToIdentity();
 
-  PrintMatrix();
+  std::vector<int> deleting_vector; 
+  int post_res = PostProcessing(&deleting_vector);
+  int new_size = rows_ - deleting_vector.size();
+  if (post_res == 2) {
+    std::cout << "The matrix has not any solutions" << std::endl;
+
+  } else if (post_res == 1) {
+    for (int i = 0; i < GetRows(); i++) {
+      for (int j = 0; j < GetRows(); j++) {
+        if (deleting_vector[j] == i) {
+          matrix_.erase(matrix_.begin() + i);
+          break;
+        }
+      }
+    }
+    rows_ = new_size;
+    PrintMatrix();
+  } else {
+    PrintMatrix();
+    std::cout << std::endl;
+  }
+  deleting_vector.clear();
+}
+
+int MatrixFractions::PostProcessing(std::vector<int> *deleting_vector) {
+  SimpleFractions zero(0, 1);
+  bool flag_zero_row = 1, flag_zero = 1;
+  int res = 0;
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_ - 1; j++) {
+      if (matrix_[i][j] != zero) {
+        flag_zero = 0;
+        flag_zero_row = 0;
+        break;
+      }
+    }
+
+    if (flag_zero_row == 1) {
+      if (matrix_[i][cols_ - 1] == zero) {
+        res = 1;
+        deleting_vector->push_back(i);
+      } else if (matrix_[i][cols_ - 1] != zero) {
+        deleting_vector->push_back(i);
+        res = 2;
+      }
+      break;
+    }
+    flag_zero = 1;
+    flag_zero_row = 1;
+  }
+
+  return res;
 }

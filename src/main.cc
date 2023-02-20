@@ -7,14 +7,10 @@ int main() {
     MatrixFractions new_matrix_frac(5, 6);
     new_matrix_frac.GetMatrix("../files/SLAE_1.txt");
     new_matrix_frac.PrintMatrix();
-    std::cout << std::endl;
     new_matrix_frac.ReduceMatrix();
     new_matrix_frac.PrintMatrix();
 
     new_matrix_frac.CalculateSLAE();
-    std::cout << std::endl;
-    new_matrix_frac.PrintMatrix();
-    std::cout << std::endl << std::endl;
 
     return 0;
 }

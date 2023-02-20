@@ -116,6 +116,16 @@ bool SimpleFractions::operator!=(const SimpleFractions& other) {
     return res;
 }
 
+bool SimpleFractions::operator==(const SimpleFractions& other) {
+    bool res = 0;
+    ReduceFraction();
+    if (numerator_ == other.numerator_ && denominator_ == other.denominator_) {
+        res = 1;
+    }
+
+    return res;
+}
+
 void SimpleFractions::ReduceFraction() {
     if (numerator_ != 0) {
         long long int NOD = SearchNOD(numerator_, denominator_);
@@ -127,7 +137,8 @@ void SimpleFractions::ReduceFraction() {
         denominator_ = 1;
     }
 
-    if (numerator_ < 0 && denominator_ < 0) {
+    if ((numerator_ < 0 && denominator_ < 0) ||
+        (numerator_ > 0 && denominator_ < 0)) {
         numerator_ *= -1;
         denominator_ *= -1;
     }
@@ -162,7 +173,13 @@ SimpleFractions::SimpleFractions(long long int numerator, long long int denomina
 
 void SimpleFractions::PrintSimpleFraction() {
     if (abs(numerator_) < EPS_CHECK) {
-        std::cout << std::fixed << 0.0f;
+        std::cout << 0;
+    } else if ((numerator_ == 1 || numerator_ == -1) && denominator_ == 1) {
+        if (numerator_ < 0) {
+            std::cout << -1;
+        } else {
+            std::cout << 1;
+        }
     } else {
         std::cout << std::fixed << numerator_ << '/' << denominator_;
     }

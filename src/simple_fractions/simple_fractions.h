@@ -22,6 +22,7 @@ class SimpleFractions {
         bool operator>(const SimpleFractions& other);
         bool operator<(const SimpleFractions& other);
         bool operator!=(const SimpleFractions& other);
+        bool operator==(const SimpleFractions& other);
 
         SimpleFractions AbsFraction();
 

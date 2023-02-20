@@ -50,7 +50,7 @@ class MatrixFractions {
 
   SimpleFractions FindAbsMaxElement(int shift, int pos);
 
-  int PostProcessing(int *row_for_del);
+  int PostProcessing(std::vector<int> *deleting_vector);
 
   void PrintResault();
   void SetToIdentity();
