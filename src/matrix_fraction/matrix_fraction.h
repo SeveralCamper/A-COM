@@ -36,11 +36,12 @@ class MatrixFractions {
                        
   void RemoveMatrix();
   void ReduceMatrix();
+  void PrintMatrix();  
   void PrintSLAE() const; 
-  void PrintMatrix();                             
+  void PrintResault() const;                           
   void FillMatrix(double iterator);
 
-  void CalculateSLAE();
+  int CalculateSLAE();
 
   void GetMatrix(std::string path);      
 
@@ -52,7 +53,6 @@ class MatrixFractions {
 
   int PostProcessing(std::vector<int> *deleting_vector);
 
-  void PrintResault();
   void SetToIdentity();
   void AddingScalingFactors(int pos, SimpleFractions main_element);
 };

@@ -4,13 +4,18 @@
 #include "matrix_fraction/matrix_fraction.h"
 
 int main() {
-    MatrixFractions new_matrix_frac(5, 6);
-    new_matrix_frac.GetMatrix("../files/SLAE_1.txt");
+    MatrixFractions new_matrix_frac(3, 5);
+    new_matrix_frac.GetMatrix("../files/SLAE_4.txt");
     new_matrix_frac.PrintMatrix();
     new_matrix_frac.ReduceMatrix();
     new_matrix_frac.PrintMatrix();
 
-    new_matrix_frac.CalculateSLAE();
+    if (new_matrix_frac.CalculateSLAE() == 2) {
+
+    } else {
+        std::cout << "RESULT:" << std::endl << std::endl;
+        new_matrix_frac.PrintResault();
+    }
 
     return 0;
 }

@@ -162,8 +162,8 @@ void MatrixFractions::SetToIdentity() {
   }
 }
 
-void MatrixFractions::CalculateSLAE() {
-  int min = 0, i = 0, j = 0;
+int MatrixFractions::CalculateSLAE() {
+  int min = 0, i = 0, j = 0, res = 0;
   if (rows_ < cols_) {
     min = rows_;
   } else {
@@ -173,7 +173,7 @@ void MatrixFractions::CalculateSLAE() {
   while(i < min) {
     AddingScalingFactors(i, FindAbsMaxElement(i, j));
     ReduceMatrix();
-    PrintMatrix();
+    PrintSLAE();
     std::cout << std::endl;
     i++;
     j++;
@@ -188,23 +188,25 @@ void MatrixFractions::CalculateSLAE() {
   int new_size = rows_ - deleting_vector.size();
   if (post_res == 2) {
     std::cout << "The matrix has not any solutions" << std::endl;
-
+    res = 2;
   } else if (post_res == 1) {
-    for (int i = 0; i < GetRows(); i++) {
-      for (int j = 0; j < GetRows(); j++) {
-        if (deleting_vector[j] == i) {
-          matrix_.erase(matrix_.begin() + i);
-          break;
+    for (auto it_i = matrix_.begin(); it_i != matrix_.end(); ++it_i) {
+      for (auto it_j = deleting_vector.begin(); it_j != deleting_vector.end(); ++it_j) {
+        if (*it_j == i) {
+          matrix_.erase(it_i);
         }
       }
     }
     rows_ = new_size;
-    PrintMatrix();
+    PrintSLAE();
+    res = 1;
   } else {
-    PrintMatrix();
+    PrintSLAE();
     std::cout << std::endl;
   }
   deleting_vector.clear();
+
+  return res;
 }
 
 int MatrixFractions::PostProcessing(std::vector<int> *deleting_vector) {
@@ -228,11 +230,79 @@ int MatrixFractions::PostProcessing(std::vector<int> *deleting_vector) {
         deleting_vector->push_back(i);
         res = 2;
       }
-      break;
     }
     flag_zero = 1;
     flag_zero_row = 1;
   }
 
   return res;
+}
+
+void MatrixFractions::PrintSLAE() const {
+  for (int j = 0; j < rows_; j++) {
+    for (int i = 0; i < cols_; i++) {
+      SimpleFractions simple_element(matrix_[j][i]);
+      if (i == 0) {
+        std::cout << std::fixed;
+        simple_element.PrintSimpleFraction();
+        std::cout << "x" << i + 1;
+      } else {
+        if (i == rows_) {
+          std::cout << " = ";
+          simple_element.PrintSimpleFraction();
+        } else {
+          if (i == cols_ - 1) {
+            std::cout << " + ";
+            simple_element.PrintSimpleFraction();
+          } else {
+            std::cout << " + ";
+            simple_element.PrintSimpleFraction();
+            std::cout << "x" << i + 1;
+          }
+        }
+      }
+    }
+    std::cout << std::endl;
+  }
+}
+
+void MatrixFractions::PrintResault() const {
+  SimpleFractions zero(0, 1);
+  for (int i = 0; i < rows_; i++) {
+    bool flag = 0, first_after = 0;
+    for (int j = 0; j < cols_; j++) {
+      SimpleFractions simple_element(matrix_[i][j]);
+      if (simple_element == zero) {
+        continue;
+      } else {
+        if (!flag) {
+          simple_element.PrintSimpleFraction();
+          std::cout << "x" << i << " = ";
+          flag = 1;
+        } else {
+          if (!first_after) {
+            if (j == cols_ - 1) {
+              simple_element.PrintSimpleFraction();
+              first_after = 1; 
+            } else {
+              simple_element.PrintSimpleFraction();
+              std::cout << "x" << i << " ";
+              first_after = 1;
+            }
+          } else {
+            if (simple_element < zero) {
+              simple_element.PrintSimpleFraction();
+              std::cout << "x" << i << " ";
+            } else {
+              std::cout << "+ ";
+              simple_element.PrintSimpleFraction();
+              std::cout << "x" << i << " ";
+            }
+          }
+
+        }
+      }
+    }
+    std::cout << std::endl;
+  }
 }
