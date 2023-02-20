@@ -173,7 +173,7 @@ int MatrixFractions::CalculateSLAE() {
   while(i < min) {
     AddingScalingFactors(i, FindAbsMaxElement(i, j));
     ReduceMatrix();
-    PrintSLAE();
+    PrintMatrix();
     std::cout << std::endl;
     i++;
     j++;
@@ -198,10 +198,10 @@ int MatrixFractions::CalculateSLAE() {
       }
     }
     rows_ = new_size;
-    PrintSLAE();
+    PrintMatrix();
     res = 1;
   } else {
-    PrintSLAE();
+    PrintMatrix();
     std::cout << std::endl;
   }
   deleting_vector.clear();
@@ -229,6 +229,7 @@ int MatrixFractions::PostProcessing(std::vector<int> *deleting_vector) {
       } else if (matrix_[i][cols_ - 1] != zero) {
         deleting_vector->push_back(i);
         res = 2;
+        break;
       }
     }
     flag_zero = 1;
