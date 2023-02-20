@@ -1,5 +1,4 @@
 CC = g++ -std=c++17
-CFLAGS = -Wall -Wextra
 
 all: clean start
 

@@ -277,7 +277,7 @@ void MatrixFractions::PrintResault() const {
       } else {
         if (!flag) {
           simple_element.PrintSimpleFraction();
-          std::cout << "x" << i << " = ";
+          std::cout << "x" << j + 1 << " = ";
           flag = 1;
         } else {
           if (!first_after) {
@@ -286,17 +286,17 @@ void MatrixFractions::PrintResault() const {
               first_after = 1; 
             } else {
               simple_element.PrintSimpleFraction();
-              std::cout << "x" << i << " ";
+              std::cout << "x" << j + 1 << " ";
               first_after = 1;
             }
           } else {
             if (simple_element < zero) {
               simple_element.PrintSimpleFraction();
-              std::cout << "x" << i << " ";
+              std::cout << "x" << j + 1 << " ";
             } else {
               std::cout << "+ ";
               simple_element.PrintSimpleFraction();
-              std::cout << "x" << i << " ";
+              std::cout << "x" << j + 1 << " ";
             }
           }
 
