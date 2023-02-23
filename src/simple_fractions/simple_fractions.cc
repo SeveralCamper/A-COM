@@ -6,11 +6,6 @@ SimpleFractions& SimpleFractions::operator=(const SimpleFractions& other) {
     ReduceFraction();
 }
 
-SimpleFractions SimpleFractions::AbsFraction() {
-    SimpleFractions new_frac(abs(this->numerator_), abs(this->denominator_));
-    return new_frac;
-}
-
 void SimpleFractions::operator+=(const SimpleFractions& other) {
     if (denominator_ == other.denominator_) {
         numerator_ += other.numerator_;
@@ -124,6 +119,11 @@ bool SimpleFractions::operator==(const SimpleFractions& other) {
     }
 
     return res;
+}
+
+SimpleFractions SimpleFractions::AbsFraction() {
+    SimpleFractions new_frac(abs(this->numerator_), abs(this->denominator_));
+    return new_frac;
 }
 
 void SimpleFractions::ReduceFraction() {

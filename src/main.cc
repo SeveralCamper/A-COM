@@ -4,8 +4,8 @@
 #include "matrix_fraction/matrix_fraction.h"
 
 int main() {
-    MatrixFractions new_matrix_frac(5, 5);
-    new_matrix_frac.GetMatrix("../files/SLAE_5.txt");
+    MatrixFractions new_matrix_frac(5, 6);
+    new_matrix_frac.GetMatrix("../files/SLAE.txt");
     new_matrix_frac.PrintMatrix();
     new_matrix_frac.ReduceMatrix();
     new_matrix_frac.PrintMatrix();

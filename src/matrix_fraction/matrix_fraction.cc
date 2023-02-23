@@ -130,11 +130,11 @@ SimpleFractions MatrixFractions::FindAbsMaxElement(int shift, int pos) {
   return sign == 1 ? max_element * minus_one : max_element;
 }
 
-void MatrixFractions::AddingScalingFactors(int pos, SimpleFractions main_element) {
+void MatrixFractions::AddingScalingFactors(int pos, SimpleFractions max_element) {
   SimpleFractions scaling_factor(1, 1), zero(0, 1);
   for (int i = 0; i < rows_; i++) {
-    if (main_element != zero) {
-      scaling_factor = matrix_[i][pos] / main_element;
+    if (max_element != zero) {
+      scaling_factor = matrix_[i][pos] / max_element;
       scaling_factor.ReduceFraction();
     }
 
