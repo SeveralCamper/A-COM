@@ -9,7 +9,9 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iterator>
 #include <iostream>
+#include <algorithm>
 #include <stdexcept>
 
 #include "../simple_fractions/simple_fractions.h"
@@ -38,7 +40,8 @@ class MatrixFractions {
   void ReduceMatrix();
   void PrintMatrix();  
   void PrintSLAE() const; 
-  void PrintResault() const;                           
+  void PrintResault() const;           
+  void CheckAllPosibleBases();     
   void FillMatrix(double iterator);
 
   int CalculateSLAE();
@@ -51,8 +54,11 @@ class MatrixFractions {
 
   SimpleFractions FindAbsMaxElement(int shift, int pos);
 
+  bool NextSet(int *vector, int length, int sample);
+
   int PostProcessing(std::vector<int> *deleting_vector);
 
   void SetToIdentity();
+  void PrintBasis(int *vector, int sample);
   void AddingScalingFactors(int pos, SimpleFractions main_element);
 };

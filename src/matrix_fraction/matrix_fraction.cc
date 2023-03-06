@@ -274,6 +274,9 @@ void MatrixFractions::PrintResault() const {
     for (int j = 0; j < cols_; j++) {
       SimpleFractions simple_element(matrix_[i][j]);
       if (simple_element == zero) {
+        if (j + 1 == cols_ && !first_after) {
+          std::cout << "0";
+        }
         continue;
       } else {
         if (!flag) {
@@ -282,8 +285,12 @@ void MatrixFractions::PrintResault() const {
           flag = 1;
         } else {
           if (!first_after) {
-            if (j == cols_ - 1) {
-              simple_element.PrintSimpleFraction();
+            if (j + 1 == cols_) {
+              if (simple_element == zero) {
+                std::cout << " 0";
+              } else {
+                simple_element.PrintSimpleFraction();
+              }
               first_after = 1; 
             } else {
               simple_element.PrintSimpleFraction();
@@ -292,12 +299,23 @@ void MatrixFractions::PrintResault() const {
             }
           } else {
             if (simple_element < zero) {
-              simple_element.PrintSimpleFraction();
-              std::cout << "x" << j + 1 << " ";
+              if (j + 1 == cols_) {
+                simple_element.PrintSimpleFraction();
+               first_after = 1; 
+              } else {
+                simple_element.PrintSimpleFraction();
+                std::cout << "x" << j + 1 << " ";
+              }
             } else {
-              std::cout << "+ ";
-              simple_element.PrintSimpleFraction();
-              std::cout << "x" << j + 1 << " ";
+              if (j + 1 == cols_) {
+                std::cout << "+ ";
+                simple_element.PrintSimpleFraction();
+                first_after = 1; 
+              } else {
+                std::cout << "+ ";
+                simple_element.PrintSimpleFraction();
+                std::cout << "x" << j + 1 << " "; 
+              }
             }
           }
 
@@ -306,4 +324,39 @@ void MatrixFractions::PrintResault() const {
     }
     std::cout << std::endl;
   }
+}
+
+void MatrixFractions::CheckAllPosibleBases() {
+  std::cout << "All posible bases are: " << std::endl;
+  int it = 1;
+  int vector[rows_];
+  for (int i = 0; i < rows_; i++, it++) {
+    vector[i] = it;
+  } 
+
+  PrintBasis(vector, 3);
+  while (NextSet(vector, rows_, 3)) {
+    PrintBasis(vector, 3);
+  }
+
+}
+
+bool MatrixFractions::NextSet(int *vector, int length, int sample) {
+  int k = sample;
+  for (int i = k - 1; i >= 0; --i)
+    if (vector[i] < length - k + i + 1) {
+      ++vector[i];
+      for (int j = i + 1; j < k; ++j)
+        vector[j] = vector[j - 1] + 1;
+      return true;
+    }
+  return false;
+}
+
+void MatrixFractions::PrintBasis(int *vector, int sample)  {
+  static int num = 1; 
+  std::cout << "Basis #" << num++ << ": ";
+  for (int i = 0; i < sample; i++)
+    std::cout << vector[i] << " ";
+  std::cout << std::endl;
 }
