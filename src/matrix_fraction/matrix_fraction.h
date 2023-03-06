@@ -35,22 +35,25 @@ class MatrixFractions {
   void SetRows(int rows_);                               
   void SetCols(int cols_);
   void SetElement(int i, int j, SimpleFractions data);
-                       
+
+  void PrintMatrix();            
   void RemoveMatrix();
   void ReduceMatrix();
-  void PrintMatrix();  
   void PrintSLAE() const; 
   void PrintResault() const;           
-  void CheckAllPosibleBases();     
+  void CheckAllPosibleBases(); 
+  void PrintTransmitionMatrix();
   void FillMatrix(double iterator);
+  void GoToNextBasis(std::vector<int> prev_basis, std::vector<int> next_basis);
 
   int CalculateSLAE();
 
   void GetMatrix(std::string path);      
 
  private:
-  int rows_, cols_;
+  int rows_, cols_, posible_bases = 1;
   std::vector<std::vector<SimpleFractions>> matrix_;
+  std::vector<std::vector<int>> transition_matrix_;
 
   SimpleFractions FindAbsMaxElement(int shift, int pos);
 

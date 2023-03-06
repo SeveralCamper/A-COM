@@ -10,8 +10,8 @@ int main() {
     std::cout << "2. Find all bases solution" << std::endl;
     std::cin >> mode;
 
-    MatrixFractions new_matrix_frac(5, 5);
-    new_matrix_frac.GetMatrix("../files/SLAE_5.txt");
+    MatrixFractions new_matrix_frac(4, 6);
+    new_matrix_frac.GetMatrix("../files/SLAE_BASIS.txt");
 
     if (mode == 1) {
         new_matrix_frac.PrintMatrix();
@@ -23,7 +23,7 @@ int main() {
             new_matrix_frac.PrintResault();
         }
     } else if (mode == 2) {
-        new_matrix_frac.CheckAllPosibleBases();
+        // new_matrix_frac.CheckAllPosibleBases();
         new_matrix_frac.PrintMatrix();
         new_matrix_frac.ReduceMatrix();
         new_matrix_frac.PrintMatrix();
@@ -32,6 +32,9 @@ int main() {
             std::cout << "RESULT:" << std::endl << std::endl;
             new_matrix_frac.PrintResault();
         }
+
+        new_matrix_frac.CheckAllPosibleBases();
+        new_matrix_frac.PrintTransmitionMatrix();
     }
 
     return 0;

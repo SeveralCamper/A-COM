@@ -326,19 +326,38 @@ void MatrixFractions::PrintResault() const {
   }
 }
 
+void MatrixFractions::GoToNextBasis(std::vector<int> prev_basis, std::vector<int> next_basis) {
+  SimpleFractions one(1,1);
+  for (int i = 0; i < prev_basis.size(); i++) {
+    if (prev_basis[i] != next_basis[i]) {
+      SimpleFractions main_element(matrix_[i - 1][i - 1]);
+      for (int j = 0; j < cols_; j++) {
+        matrix_[i - 1][j] /= main_element;
+      }
+    }
+  }
+}
+
 void MatrixFractions::CheckAllPosibleBases() {
+  std::cout << std::endl;
   std::cout << "All posible bases are: " << std::endl;
+  std::cout << std::endl;
   int it = 1;
-  int vector[rows_];
-  for (int i = 0; i < rows_; i++, it++) {
+  int vector[cols_ - 1];
+  for (int i = 0; i < cols_ - 1; i++, it++) {
     vector[i] = it;
   } 
 
+  std::vector<int> vec = {1, 2, 3};
+  transition_matrix_.push_back(vec);
   PrintBasis(vector, 3);
-  while (NextSet(vector, rows_, 3)) {
+  while (NextSet(vector, cols_ - 1, 3)) {
     PrintBasis(vector, 3);
+    vec[0] = vector[0];
+    vec[1] = vector[1];
+    vec[2] = vector[2];
+    transition_matrix_.push_back(vec);
   }
-
 }
 
 bool MatrixFractions::NextSet(int *vector, int length, int sample) {
@@ -359,4 +378,17 @@ void MatrixFractions::PrintBasis(int *vector, int sample)  {
   for (int i = 0; i < sample; i++)
     std::cout << vector[i] << " ";
   std::cout << std::endl;
+}
+
+void MatrixFractions::PrintTransmitionMatrix() {
+  std::cout << std::endl;
+  std::cout << "Transmition Matrix" << std::endl;
+  std::cout << std::endl;
+  for (int i = 0; i < transition_matrix_.size(); i++) {
+    std::cout << "Basis #" << i + 1 << ": ";
+    for (int j = 0; j < transition_matrix_[i].size(); j++) {
+      std::cout << transition_matrix_[i][j] << ' ';
+    }
+    std::cout << std::endl;
+  }
 }
