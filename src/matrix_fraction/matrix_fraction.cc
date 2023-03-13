@@ -211,12 +211,11 @@ int MatrixFractions::CalculateSLAE() {
 
 int MatrixFractions::PostProcessing(std::vector<int> *deleting_vector) {
   SimpleFractions zero(0, 1);
-  bool flag_zero_row = 1, flag_zero = 1;
+  bool flag_zero_row = 1;
   int res = 0;
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_ - 1; j++) {
       if (matrix_[i][j] != zero) {
-        flag_zero = 0;
         flag_zero_row = 0;
         break;
       }
@@ -232,7 +231,6 @@ int MatrixFractions::PostProcessing(std::vector<int> *deleting_vector) {
         break;
       }
     }
-    flag_zero = 1;
     flag_zero_row = 1;
   }
 
@@ -267,7 +265,7 @@ void MatrixFractions::PrintSLAE() const {
   }
 }
 
-void MatrixFractions::PrintResault() const {
+void MatrixFractions::PrintResault(std::vector<int> current_basis) const {
   SimpleFractions zero(0, 1);
   for (int i = 0; i < rows_; i++) {
     bool flag = 0, first_after = 0;
@@ -281,7 +279,11 @@ void MatrixFractions::PrintResault() const {
       } else {
         if (!flag) {
           simple_element.PrintSimpleFraction();
-          std::cout << "x" << j + 1 << " = ";
+          if (j > 2) {
+            std::cout << "x" << j + 1 << " = ";
+          } else {
+            std::cout << "x" << current_basis[j] << " = ";
+          }
           flag = 1;
         } else {
           if (!first_after) {
@@ -294,7 +296,11 @@ void MatrixFractions::PrintResault() const {
               first_after = 1; 
             } else {
               simple_element.PrintSimpleFraction();
-              std::cout << "x" << j + 1 << " ";
+              if (j > 2) {
+                std::cout << "x" << j + 1 << " ";
+              } else {
+                std::cout << "x" << current_basis[j] << " ";
+              }
               first_after = 1;
             }
           } else {
@@ -304,7 +310,11 @@ void MatrixFractions::PrintResault() const {
                first_after = 1; 
               } else {
                 simple_element.PrintSimpleFraction();
-                std::cout << "x" << j + 1 << " ";
+                if (j > 2) {
+                  std::cout << "x" << j + 1 << " ";
+                } else {
+                  std::cout << "x" << current_basis[j] << " ";
+                }
               }
             } else {
               if (j + 1 == cols_) {
@@ -314,7 +324,11 @@ void MatrixFractions::PrintResault() const {
               } else {
                 std::cout << "+ ";
                 simple_element.PrintSimpleFraction();
-                std::cout << "x" << j + 1 << " "; 
+                if (j > 2) {
+                  std::cout << "x" << j + 1 << " ";
+                } else {
+                  std::cout << "x" << current_basis[j] << " ";
+                }
               }
             }
           }
@@ -346,6 +360,16 @@ void MatrixFractions::CheckAllPosibleBases() {
     vec[2] = vector[2];
     transition_matrix_.push_back(vec);
   }
+}
+
+MatrixFractions MatrixFractions::Transpose() {
+  MatrixFractions Resault(cols_, rows_);
+  for (int i = 0; i < Resault.rows_; i++) {
+    for (int j = 0; j < Resault.cols_; j++) {
+      Resault.matrix_[i][j] = matrix_[j][i];
+    }
+  }
+  return Resault;
 }
 
 bool MatrixFractions::NextSet(int *vector, int length, int sample) {
@@ -403,7 +427,7 @@ void MatrixFractions::BasesTransition() {
     NewBasis.PrintMatrix();
     if (NewBasis.CalculateSLAE() != 2) {
         std::cout << "RESULT:" << std::endl << std::endl;
-        NewBasis.PrintResault();
+        NewBasis.PrintResault(current_basis);
     }
     std::cout << std::endl;
   }

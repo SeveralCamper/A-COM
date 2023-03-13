@@ -32,6 +32,8 @@ class MatrixFractions {
   std::vector<std::vector<SimpleFractions>> GetMatrix() const;
   SimpleFractions GetElement(int i, int j) const;
 
+  MatrixFractions Transpose();
+
   void SetRows(int rows_);                               
   void SetCols(int cols_);
   void SetElement(int i, int j, SimpleFractions data);
@@ -41,7 +43,8 @@ class MatrixFractions {
   void ReduceMatrix();
   void BasesTransition();
   void PrintSLAE() const;
-  void PrintResault() const;         
+  void PrintResault() const;
+  void PrintResault(std::vector<int> current_basis) const;         
   void CheckAllPosibleBases();
   void PrintTransmitionMatrix();
   void FillMatrix(double iterator);
