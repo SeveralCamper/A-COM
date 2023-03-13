@@ -39,12 +39,12 @@ class MatrixFractions {
   void PrintMatrix();            
   void RemoveMatrix();
   void ReduceMatrix();
-  void PrintSLAE() const; 
-  void PrintResault() const;           
-  void CheckAllPosibleBases(); 
+  void BasesTransition();
+  void PrintSLAE() const;
+  void PrintResault() const;         
+  void CheckAllPosibleBases();
   void PrintTransmitionMatrix();
   void FillMatrix(double iterator);
-  void GoToNextBasis(std::vector<int> prev_basis, std::vector<int> next_basis);
 
   int CalculateSLAE();
 

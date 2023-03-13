@@ -326,18 +326,6 @@ void MatrixFractions::PrintResault() const {
   }
 }
 
-void MatrixFractions::GoToNextBasis(std::vector<int> prev_basis, std::vector<int> next_basis) {
-  SimpleFractions one(1,1);
-  for (int i = 0; i < prev_basis.size(); i++) {
-    if (prev_basis[i] != next_basis[i]) {
-      SimpleFractions main_element(matrix_[i - 1][i - 1]);
-      for (int j = 0; j < cols_; j++) {
-        matrix_[i - 1][j] /= main_element;
-      }
-    }
-  }
-}
-
 void MatrixFractions::CheckAllPosibleBases() {
   std::cout << std::endl;
   std::cout << "All posible bases are: " << std::endl;
@@ -388,6 +376,34 @@ void MatrixFractions::PrintTransmitionMatrix() {
     std::cout << "Basis #" << i + 1 << ": ";
     for (int j = 0; j < transition_matrix_[i].size(); j++) {
       std::cout << transition_matrix_[i][j] << ' ';
+    }
+    std::cout << std::endl;
+  }
+}
+
+void MatrixFractions::BasesTransition() {
+  for (int i = 0; i < transition_matrix_.size(); i++) {
+    std::vector<int> current_basis = transition_matrix_[i];
+    std::cout << "Basis " << current_basis[0] << ' ' << current_basis[1] << ' ' << current_basis[2] << ':' << std::endl;
+    MatrixFractions NewBasis(rows_, 4);
+    int k = 0;
+    for (int i = 0; i < current_basis.size(); i++) {
+      k = 0;
+      std::vector<SimpleFractions> current_mat = matrix_[i];
+      for (int j = 0; j < NewBasis.cols_; j++) {
+        NewBasis.matrix_[i][j] = matrix_[i][current_basis[k] - 1];
+        k++;
+      }
+    }
+
+    for (int j = 0; j < NewBasis.rows_; j++) {
+      NewBasis.matrix_[j][3] = matrix_[j][cols_ - 1 ];
+    }
+
+    NewBasis.PrintMatrix();
+    if (NewBasis.CalculateSLAE() != 2) {
+        std::cout << "RESULT:" << std::endl << std::endl;
+        NewBasis.PrintResault();
     }
     std::cout << std::endl;
   }

@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include "matrix/matrix_oop.h"
 #include "matrix_fraction/matrix_fraction.h"
 
 int main() {
@@ -10,8 +9,8 @@ int main() {
     std::cout << "2. Find all bases solution" << std::endl;
     std::cin >> mode;
 
-    MatrixFractions new_matrix_frac(4, 6);
-    new_matrix_frac.GetMatrix("../files/SLAE_BASIS.txt");
+    MatrixFractions new_matrix_frac(5, 6);
+    new_matrix_frac.GetMatrix("../files/SLAE.txt");
 
     if (mode == 1) {
         new_matrix_frac.PrintMatrix();
@@ -32,9 +31,12 @@ int main() {
             std::cout << "RESULT:" << std::endl << std::endl;
             new_matrix_frac.PrintResault();
         }
+        new_matrix_frac.PrintMatrix();
 
         new_matrix_frac.CheckAllPosibleBases();
         new_matrix_frac.PrintTransmitionMatrix();
+        std::cout << std::endl;
+        new_matrix_frac.BasesTransition();
     }
 
     return 0;
