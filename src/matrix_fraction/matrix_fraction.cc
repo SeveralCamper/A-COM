@@ -265,7 +265,7 @@ void MatrixFractions::PrintSLAE() const {
   }
 }
 
-void MatrixFractions::PrintResault(std::vector<int> current_basis) const {
+void MatrixFractions::PrintResult(std::vector<int> current_basis) const {
   SimpleFractions zero(0, 1);
   for (int i = 0; i < rows_; i++) {
     bool flag = 0, first_after = 0;
@@ -427,8 +427,80 @@ void MatrixFractions::BasesTransition() {
     NewBasis.PrintMatrix();
     if (NewBasis.CalculateSLAE() != 2) {
         std::cout << "RESULT:" << std::endl << std::endl;
-        NewBasis.PrintResault(current_basis);
+        NewBasis.PrintResult(current_basis);
     }
     std::cout << std::endl;
+  }
+}
+
+std::vector<double> MatrixFractions::GetNeeds() {
+  return needs_;
+}
+
+std::vector<double> MatrixFractions::GetReservers() {
+  return reserves_;
+}
+
+void MatrixFractions::PrintNeeds() {
+  for (int i = 0; i < rows_; i++) {
+    std::cout << needs_[i] << ' ';
+  }
+  std::cout << std::endl;
+}
+
+void MatrixFractions::PrintReservers() {
+  for (int i = 0; i < cols_; i++) {
+    std::cout << reserves_[i] << ' ';
+  }
+  std::cout << std::endl;
+}
+
+void MatrixFractions::GetTransportMatrix(std::string path) {
+  std::ifstream matrix_file(path);
+  double value = 0.0;
+  for (int i = 0; i <= rows_; i++) {
+    for (int j = 0; j <= cols_; j++) {
+      matrix_file >> value;
+      if (i == rows_) {
+        reserves_.push_back(value);
+        continue;
+      } 
+
+      if (j == cols_) {
+        needs_.push_back(value);
+        continue;
+      }
+
+      SimpleFractions frac(value);
+      matrix_[i][j] = frac;
+    }
+  }
+  matrix_file.close();
+} 
+
+bool MatrixFractions::CheckBalance() {
+  double needs = 0, reserves = 0;
+  for (int i = 0; i < rows_; i++) {
+    needs += needs_[i];
+  }
+
+  for (int i = 0; i < cols_; i++) {
+    reserves += reserves_[i];
+  }
+
+  return (needs == reserves) ? true : false;
+}
+
+void MatrixFractions::TransportTask() {
+  if (CheckBalance()) {
+    std::cout << "hehe" << std::endl;
+    int needs_i = 0, reservers_i = 0;
+    for (int i = 0; i < rows_; i++) {
+      for (int j = 0; j < cols_; j++) {
+
+      }
+    }
+  } else {
+    std::cout << "not hehe" << std::endl;
   }
 }
