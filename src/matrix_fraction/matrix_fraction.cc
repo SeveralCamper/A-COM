@@ -510,12 +510,23 @@ void MatrixFractions::TransportTask() {
   if (task_type > 0) {
     new_cols++;
     needs_[rows_ + 1] = task_type;
+    std::cout << "The transport task is open: reserves are bigger than needs" << std::endl;
   } else if (task_type < 0) {
     new_rows++;
     reserves_.push_back(task_type * (-1));
+    std::cout << "The transport task is open: needs are bigger than reserves" << std::endl;
+  } else {
+    std::cout << "The transport task is closed" << std::endl;
   }
-  
+
+  std::cout << "Needs vector:" << std::endl;
+  PrintNeeds(new_cols);
+  std::cout << "Reserves vector:" << std::endl;
+  PrintReserves(new_rows);
+
+  std::cout << std::endl;
   PrintMatrix();
+  std::cout << "------------------------------------------------------------------------------------------" << std::endl << std::endl;
 
   MatrixFractions transport_matrix(new_rows, new_cols);
   bool needs_flag = 0;
@@ -548,6 +559,7 @@ void MatrixFractions::TransportTask() {
       std::cout << "Reserves vector:" << std::endl;
       PrintReserves(new_rows);
       std::cout << std::endl;
+      std::cout << "------------------------------------------------------------------------------------------" << std::endl << std::endl;
     }
 
   double transport_cost = 0;
