@@ -19,7 +19,7 @@ MatrixFractions::MatrixFractions(int rows, int cols) {
   }
   cols_ = cols;
   rows_ = rows;
-  FillMatrix(0);
+  FillMatrix(1);
 }
 
 MatrixFractions::~MatrixFractions() {
@@ -441,15 +441,15 @@ std::vector<double> MatrixFractions::GetReservers() {
   return reserves_;
 }
 
-void MatrixFractions::PrintNeeds() {
-  for (int i = 0; i < rows_; i++) {
+void MatrixFractions::PrintNeeds(int new_cols) {
+  for (int i = 0; i < new_cols; i++) {
     std::cout << needs_[i] << ' ';
   }
   std::cout << std::endl;
 }
 
-void MatrixFractions::PrintReservers() {
-  for (int i = 0; i < cols_; i++) {
+void MatrixFractions::PrintReserves(int new_rows) {
+  for (int i = 0; i < new_rows; i++) {
     std::cout << reserves_[i] << ' ';
   }
   std::cout << std::endl;
@@ -458,16 +458,10 @@ void MatrixFractions::PrintReservers() {
 void MatrixFractions::GetTransportMatrix(std::string path) {
   std::ifstream matrix_file(path);
   double value = 0.0;
-  for (int i = 0; i <= rows_; i++) {
-    for (int j = 0; j <= cols_; j++) {
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_ + 1; j++) {
       matrix_file >> value;
-      if (i == rows_) {
-        reserves_.push_back(value);
-        continue;
-      } 
-
       if (j == cols_) {
-        needs_.push_back(value);
         continue;
       }
 
@@ -476,31 +470,98 @@ void MatrixFractions::GetTransportMatrix(std::string path) {
     }
   }
   matrix_file.close();
+
+  matrix_file.open(path);
+  for (int i = 0; i <= rows_; i++) {
+    for (int j = 0; j <= cols_; j++) {
+      matrix_file >> value;
+
+      if (i == rows_) {
+        needs_.push_back(value);
+        continue;
+      }
+
+      if (j == cols_) {
+        reserves_.push_back(value);
+        continue;
+      }
+
+    }
+  }
+  matrix_file.close();
 } 
 
-bool MatrixFractions::CheckBalance() {
+int MatrixFractions::CheckBalance() {
   double needs = 0, reserves = 0;
-  for (int i = 0; i < rows_; i++) {
+  for (int i = 0; i < cols_; i++) {
     needs += needs_[i];
   }
 
-  for (int i = 0; i < cols_; i++) {
+  for (int i = 0; i < rows_; i++) {
     reserves += reserves_[i];
   }
 
-  return (needs == reserves) ? true : false;
+  return reserves - needs;
 }
 
 void MatrixFractions::TransportTask() {
-  if (CheckBalance()) {
-    std::cout << "hehe" << std::endl;
-    int needs_i = 0, reservers_i = 0;
-    for (int i = 0; i < rows_; i++) {
-      for (int j = 0; j < cols_; j++) {
+  int task_type = CheckBalance();
+  int new_rows = rows_, new_cols = cols_;
+  if (task_type > 0) {
+    new_cols++;
+    needs_[rows_ + 1] = task_type;
+  } else if (task_type < 0) {
+    new_rows++;
+    reserves_.push_back(task_type * (-1));
+  }
+  
+  PrintMatrix();
 
+  MatrixFractions transport_matrix(new_rows, new_cols);
+  bool needs_flag = 0;
+  int needs_i = 0, reserves_i = 0, j_start = 0;
+    for (int i = 0; i < new_rows; i++) {
+      for (int j = j_start; j < new_cols; j++) {
+        if (needs_flag) {
+          transport_matrix.matrix_[i][j] = 0;
+        } else {
+          if (needs_[needs_i] > reserves_[reserves_i]) {
+            transport_matrix.matrix_[i][j] = reserves_[reserves_i];
+            needs_[needs_i] -= reserves_[reserves_i];
+            reserves_[reserves_i] = 0; reserves_i++;
+            needs_flag = 1;
+          } else if (needs_[needs_i] < reserves_[reserves_i]) {
+            transport_matrix.matrix_[i][j] = needs_[needs_i];
+            reserves_[reserves_i] -= needs_[needs_i];
+            needs_[needs_i] = 0; needs_i++; j_start++;          
+          } else {
+            transport_matrix.matrix_[i][j] = needs_[needs_i];
+            reserves_[reserves_i] = needs_[needs_i] = 0;
+            reserves_i++; needs_i++;               
+          }
+        }
+      }
+      needs_flag = 0;
+      transport_matrix.PrintMatrix();
+      std::cout << "Needs vector:" << std::endl;
+      PrintNeeds(new_cols);
+      std::cout << "Reserves vector:" << std::endl;
+      PrintReserves(new_rows);
+      std::cout << std::endl;
+    }
+
+  double transport_cost = 0;
+  
+  std::cout << "Transportation cost: ";
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_; j++) {
+      if (transport_matrix.matrix_[i][j] != 0) {
+        transport_cost += transport_matrix.matrix_[i][j].ConvertToDouble() * matrix_[i][j].ConvertToDouble();
       }
     }
-  } else {
-    std::cout << "not hehe" << std::endl;
   }
+  std::cout << transport_cost << std::endl;
 }
+
+
+

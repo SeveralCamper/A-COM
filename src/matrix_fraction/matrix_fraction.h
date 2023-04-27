@@ -41,22 +41,21 @@ class MatrixFractions {
   void SetCols(int cols_);
   void SetElement(int i, int j, SimpleFractions data);
 
-  void PrintNeeds();
   void PrintMatrix();         
   void RemoveMatrix();
   void ReduceMatrix();
   void TransportTask();
-  void PrintReservers();
   void BasesTransition();
   void PrintSLAE() const;
+  void PrintNeeds(int new_cols);
+  void PrintReserves(int new_rows);
   void PrintResult(std::vector<int> current_basis) const;         
   void CheckAllPosibleBases();
   void PrintTransmitionMatrix();
   void FillMatrix(double iterator);
 
+  int CheckBalance();
   int CalculateSLAE();
-
-  bool CheckBalance();
 
   void GetMatrix(std::string path); 
   void GetTransportMatrix(std::string path);      
