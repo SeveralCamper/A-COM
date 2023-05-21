@@ -1,47 +1,47 @@
 #pragma once
 
-#include <stdio.h>
 #include <float.h>
-#include <stdlib.h>
 #include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include <cmath>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iterator>
-#include <iostream>
 #include <algorithm>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <iterator>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 #include "../simple_fractions/simple_fractions.h"
 
 #define EPS 1e-7
 
 class MatrixFractions {
- public:
+public:
   MatrixFractions();
   MatrixFractions(int rows, int cols);
   ~MatrixFractions();
 
-  SimpleFractions operator()(int i, int j) const;    
+  SimpleFractions operator()(int i, int j) const;
 
   int GetRows() const;
   int GetCols() const;
 
   std::vector<double> GetNeeds();
   std::vector<double> GetReservers();
-               
+
   std::vector<std::vector<SimpleFractions>> GetMatrix() const;
   SimpleFractions GetElement(int i, int j) const;
 
   MatrixFractions Transpose();
 
-  void SetRows(int rows_);                               
+  void SetRows(int rows_);
   void SetCols(int cols_);
   void SetElement(int i, int j, SimpleFractions data);
 
-  void PrintMatrix();         
+  void PrintMatrix();
   void RemoveMatrix();
   void ReduceMatrix();
   void TransportTask();
@@ -49,7 +49,7 @@ class MatrixFractions {
   void PrintSLAE() const;
   void PrintNeeds(int new_cols);
   void PrintReserves(int new_rows);
-  void PrintResult(std::vector<int> current_basis) const;         
+  void PrintResult(std::vector<int> current_basis) const;
   void CheckAllPosibleBases();
   void PrintTransmitionMatrix();
   void FillMatrix(double iterator);
@@ -57,10 +57,10 @@ class MatrixFractions {
   int CheckBalance();
   int CalculateSLAE();
 
-  void GetMatrix(std::string path); 
+  void GetMatrix(std::string path);
   void GetTransportMatrix(std::string path);
 
- private:
+private:
   int rows_, cols_, posible_bases = 1;
 
   std::vector<std::vector<SimpleFractions>> matrix_;

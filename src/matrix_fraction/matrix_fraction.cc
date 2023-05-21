@@ -34,16 +34,16 @@ MatrixFractions::~MatrixFractions() {
 }
 
 void MatrixFractions::RemoveMatrix() {
-    for (int i = 0; i < rows_; i++) {
-        matrix_[i].clear();
-    }
-    matrix_.clear();
+  for (int i = 0; i < rows_; i++) {
+    matrix_[i].clear();
+  }
+  matrix_.clear();
 }
 
 void MatrixFractions::ReduceMatrix() {
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_; j++) {
-        matrix_[i][j].ReduceFraction();
+      matrix_[i][j].ReduceFraction();
     }
   }
 }
@@ -95,16 +95,18 @@ int MatrixFractions::GetRows() const { return rows_; }
 
 int MatrixFractions::GetCols() const { return cols_; }
 
-std::vector<std::vector<SimpleFractions>> MatrixFractions::GetMatrix() const { return matrix_; }
+std::vector<std::vector<SimpleFractions>> MatrixFractions::GetMatrix() const {
+  return matrix_;
+}
 
 void MatrixFractions::GetMatrix(std::string path) {
   std::ifstream matrix_file(path);
   double value = 0.0;
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_; j++) {
-        matrix_file >> value;
-        SimpleFractions frac(value);
-        matrix_[i][j] = frac;
+      matrix_file >> value;
+      SimpleFractions frac(value);
+      matrix_[i][j] = frac;
     }
   }
   matrix_file.close();
@@ -133,7 +135,8 @@ SimpleFractions MatrixFractions::FindAbsMaxElement(int shift, int pos) {
   return sign == 1 ? max_element * minus_one : max_element;
 }
 
-void MatrixFractions::AddingScalingFactors(int pos, SimpleFractions max_element) {
+void MatrixFractions::AddingScalingFactors(int pos,
+                                           SimpleFractions max_element) {
   SimpleFractions scaling_factor(1, 1), zero(0, 1);
   for (int i = 0; i < rows_; i++) {
     if (max_element != zero) {
@@ -144,7 +147,7 @@ void MatrixFractions::AddingScalingFactors(int pos, SimpleFractions max_element)
     if (i != pos) {
       for (int j = 0; j < cols_; j++) {
         matrix_[i][j] = matrix_[i][j] - scaling_factor * matrix_[pos][j];
-      } 
+      }
     }
   }
 }
@@ -173,7 +176,7 @@ int MatrixFractions::CalculateSLAE() {
     min = cols_;
   }
 
-  while(i < min) {
+  while (i < min) {
     AddingScalingFactors(i, FindAbsMaxElement(i, j));
     ReduceMatrix();
     PrintMatrix();
@@ -186,7 +189,7 @@ int MatrixFractions::CalculateSLAE() {
 
   SetToIdentity();
 
-  std::vector<int> deleting_vector; 
+  std::vector<int> deleting_vector;
   int post_res = PostProcessing(&deleting_vector);
   int new_size = rows_ - deleting_vector.size();
   if (post_res == 2) {
@@ -194,7 +197,8 @@ int MatrixFractions::CalculateSLAE() {
     res = 2;
   } else if (post_res == 1) {
     for (auto it_i = matrix_.begin(); it_i != matrix_.end(); ++it_i) {
-      for (auto it_j = deleting_vector.begin(); it_j != deleting_vector.end(); ++it_j) {
+      for (auto it_j = deleting_vector.begin(); it_j != deleting_vector.end();
+           ++it_j) {
         if (*it_j == i) {
           matrix_.erase(it_i);
         }
@@ -296,7 +300,7 @@ void MatrixFractions::PrintResult(std::vector<int> current_basis) const {
               } else {
                 simple_element.PrintSimpleFraction();
               }
-              first_after = 1; 
+              first_after = 1;
             } else {
               simple_element.PrintSimpleFraction();
               if (j > 2) {
@@ -310,7 +314,7 @@ void MatrixFractions::PrintResult(std::vector<int> current_basis) const {
             if (simple_element < zero) {
               if (j + 1 == cols_) {
                 simple_element.PrintSimpleFraction();
-               first_after = 1; 
+                first_after = 1;
               } else {
                 simple_element.PrintSimpleFraction();
                 if (j > 2) {
@@ -323,7 +327,7 @@ void MatrixFractions::PrintResult(std::vector<int> current_basis) const {
               if (j + 1 == cols_) {
                 std::cout << "+ ";
                 simple_element.PrintSimpleFraction();
-                first_after = 1; 
+                first_after = 1;
               } else {
                 std::cout << "+ ";
                 simple_element.PrintSimpleFraction();
@@ -335,7 +339,6 @@ void MatrixFractions::PrintResult(std::vector<int> current_basis) const {
               }
             }
           }
-
         }
       }
     }
@@ -351,7 +354,7 @@ void MatrixFractions::CheckAllPosibleBases() {
   int vector[cols_ - 1];
   for (int i = 0; i < cols_ - 1; i++, it++) {
     vector[i] = it;
-  } 
+  }
 
   std::vector<int> vec = {1, 2, 3};
   transition_matrix_.push_back(vec);
@@ -387,8 +390,8 @@ bool MatrixFractions::NextSet(int *vector, int length, int sample) {
   return false;
 }
 
-void MatrixFractions::PrintBasis(int *vector, int sample)  {
-  static int num = 1; 
+void MatrixFractions::PrintBasis(int *vector, int sample) {
+  static int num = 1;
   std::cout << "Basis #" << num++ << ": ";
   for (int i = 0; i < sample; i++)
     std::cout << vector[i] << " ";
@@ -411,7 +414,8 @@ void MatrixFractions::PrintTransmitionMatrix() {
 void MatrixFractions::BasesTransition() {
   for (int i = 0; i < transition_matrix_.size(); i++) {
     std::vector<int> current_basis = transition_matrix_[i];
-    std::cout << "Basis " << current_basis[0] << ' ' << current_basis[1] << ' ' << current_basis[2] << ':' << std::endl;
+    std::cout << "Basis " << current_basis[0] << ' ' << current_basis[1] << ' '
+              << current_basis[2] << ':' << std::endl;
     MatrixFractions NewBasis(rows_, 4);
     int k = 0;
     for (int i = 0; i < current_basis.size(); i++) {
@@ -424,25 +428,21 @@ void MatrixFractions::BasesTransition() {
     }
 
     for (int j = 0; j < NewBasis.rows_; j++) {
-      NewBasis.matrix_[j][3] = matrix_[j][cols_ - 1 ];
+      NewBasis.matrix_[j][3] = matrix_[j][cols_ - 1];
     }
 
     NewBasis.PrintMatrix();
     if (NewBasis.CalculateSLAE() != 2) {
-        std::cout << "RESULT:" << std::endl << std::endl;
-        NewBasis.PrintResult(current_basis);
+      std::cout << "RESULT:" << std::endl << std::endl;
+      NewBasis.PrintResult(current_basis);
     }
     std::cout << std::endl;
   }
 }
 
-std::vector<double> MatrixFractions::GetNeeds() {
-  return needs_;
-}
+std::vector<double> MatrixFractions::GetNeeds() { return needs_; }
 
-std::vector<double> MatrixFractions::GetReservers() {
-  return reserves_;
-}
+std::vector<double> MatrixFractions::GetReservers() { return reserves_; }
 
 void MatrixFractions::PrintNeeds(int new_cols) {
   for (int i = 0; i < new_cols; i++) {
@@ -488,11 +488,10 @@ void MatrixFractions::GetTransportMatrix(std::string path) {
         reserves_.push_back(value);
         continue;
       }
-
     }
   }
   matrix_file.close();
-} 
+}
 
 int MatrixFractions::CheckBalance() {
   double needs = 0, reserves = 0;
@@ -513,11 +512,13 @@ void MatrixFractions::TransportTask() {
   if (task_type > 0) {
     new_cols++;
     needs_[rows_ + 1] = task_type;
-    std::cout << "The transport task is open: reserves are bigger than needs" << std::endl;
+    std::cout << "The transport task is open: reserves are bigger than needs"
+              << std::endl;
   } else if (task_type < 0) {
     new_rows++;
     reserves_.push_back(task_type * (-1));
-    std::cout << "The transport task is open: needs are bigger than reserves" << std::endl;
+    std::cout << "The transport task is open: needs are bigger than reserves"
+              << std::endl;
   } else {
     std::cout << "The transport task is closed" << std::endl;
   }
@@ -529,54 +530,66 @@ void MatrixFractions::TransportTask() {
 
   std::cout << std::endl;
   PrintMatrix();
-  std::cout << "------------------------------------------------------------------------------------------" << std::endl << std::endl;
+  std::cout << "---------------------------------------------------------------"
+               "---------------------------"
+            << std::endl
+            << std::endl;
 
   MatrixFractions transport_matrix(new_rows, new_cols);
   bool needs_flag = 0;
   int needs_i = 0, reserves_i = 0, j_start = 0;
-    for (int i = 0; i < new_rows; i++) {
-      for (int j = 0; j < new_cols; j++) {
-        if (j < j_start - 1) {
+  for (int i = 0; i < new_rows; i++) {
+    for (int j = 0; j < new_cols; j++) {
+      if (j < j_start - 1) {
+        transport_matrix.matrix_[i][j] = -1;
+      } else if (j >= j_start) {
+        if (needs_flag) {
           transport_matrix.matrix_[i][j] = -1;
-        } else if (j >= j_start) {
-          if (needs_flag) {
-            transport_matrix.matrix_[i][j] = -1;
+        } else {
+          if (needs_[needs_i] > reserves_[reserves_i]) {
+            transport_matrix.matrix_[i][j] = reserves_[reserves_i];
+            needs_[needs_i] -= reserves_[reserves_i];
+            reserves_[reserves_i] = 0;
+            reserves_i++;
+            needs_flag = 1;
+          } else if (needs_[needs_i] < reserves_[reserves_i]) {
+            transport_matrix.matrix_[i][j] = needs_[needs_i];
+            reserves_[reserves_i] -= needs_[needs_i];
+            needs_[needs_i] = 0;
+            needs_i++;
+            j_start++;
           } else {
-            if (needs_[needs_i] > reserves_[reserves_i]) {
-              transport_matrix.matrix_[i][j] = reserves_[reserves_i];
-              needs_[needs_i] -= reserves_[reserves_i];
-              reserves_[reserves_i] = 0; reserves_i++;
-              needs_flag = 1;
-            } else if (needs_[needs_i] < reserves_[reserves_i]) {
-              transport_matrix.matrix_[i][j] = needs_[needs_i];
-              reserves_[reserves_i] -= needs_[needs_i];
-              needs_[needs_i] = 0; needs_i++; j_start++;          
-            } else {
-              transport_matrix.matrix_[i][j] = needs_[needs_i];
-              reserves_[reserves_i] = needs_[needs_i] = 0;
-              reserves_i++; needs_i++; 
-              needs_flag = 1; j_start++;          
-            }
+            transport_matrix.matrix_[i][j] = needs_[needs_i];
+            reserves_[reserves_i] = needs_[needs_i] = 0;
+            reserves_i++;
+            needs_i++;
+            needs_flag = 1;
+            j_start++;
           }
         }
       }
-      needs_flag = 0;
-      transport_matrix.PrintMatrix();
-      std::cout << "Needs vector:" << std::endl;
-      PrintNeeds(new_cols);
-      std::cout << "Reserves vector:" << std::endl;
-      PrintReserves(new_rows);
-      std::cout << std::endl;
-      std::cout << "------------------------------------------------------------------------------------------" << std::endl << std::endl;
     }
+    needs_flag = 0;
+    transport_matrix.PrintMatrix();
+    std::cout << "Needs vector:" << std::endl;
+    PrintNeeds(new_cols);
+    std::cout << "Reserves vector:" << std::endl;
+    PrintReserves(new_rows);
+    std::cout << std::endl;
+    std::cout << "-------------------------------------------------------------"
+                 "-----------------------------"
+              << std::endl
+              << std::endl;
+  }
 
   double transport_cost = 0;
-  
+
   std::cout << "Transportation cost: ";
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_; j++) {
       if (transport_matrix.matrix_[i][j] != 0) {
-        transport_cost += transport_matrix.matrix_[i][j].ConvertToDouble() * matrix_[i][j].ConvertToDouble();
+        transport_cost += transport_matrix.matrix_[i][j].ConvertToDouble() *
+                          matrix_[i][j].ConvertToDouble();
       }
     }
   }
