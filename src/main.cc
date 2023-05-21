@@ -11,8 +11,8 @@ int main() {
     std::cin >> mode;
 
     if (mode == 3) {
-        MatrixFractions new_matrix_transport(4,5);
-        new_matrix_transport.GetTransportMatrix("../files/transport_task_5.txt");
+        MatrixFractions new_matrix_transport(2,5);
+        new_matrix_transport.GetTransportMatrix("../files/transport_task_6.txt");
         new_matrix_transport.TransportTask();
     } else {
         MatrixFractions new_matrix_frac(4, 6);

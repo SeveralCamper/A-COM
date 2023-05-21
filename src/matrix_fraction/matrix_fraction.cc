@@ -20,6 +20,9 @@ MatrixFractions::MatrixFractions(int rows, int cols) {
   cols_ = cols;
   rows_ = rows;
   FillMatrix(1);
+  for (int i = 0; i < cols_; i++) {
+    permutations_.push_back(0);
+  }
 }
 
 MatrixFractions::~MatrixFractions() {
@@ -532,23 +535,28 @@ void MatrixFractions::TransportTask() {
   bool needs_flag = 0;
   int needs_i = 0, reserves_i = 0, j_start = 0;
     for (int i = 0; i < new_rows; i++) {
-      for (int j = j_start; j < new_cols; j++) {
-        if (needs_flag) {
-          transport_matrix.matrix_[i][j] = 0;
-        } else {
-          if (needs_[needs_i] > reserves_[reserves_i]) {
-            transport_matrix.matrix_[i][j] = reserves_[reserves_i];
-            needs_[needs_i] -= reserves_[reserves_i];
-            reserves_[reserves_i] = 0; reserves_i++;
-            needs_flag = 1;
-          } else if (needs_[needs_i] < reserves_[reserves_i]) {
-            transport_matrix.matrix_[i][j] = needs_[needs_i];
-            reserves_[reserves_i] -= needs_[needs_i];
-            needs_[needs_i] = 0; needs_i++; j_start++;          
+      for (int j = 0; j < new_cols; j++) {
+        if (j < j_start - 1) {
+          transport_matrix.matrix_[i][j] = -1;
+        } else if (j >= j_start) {
+          if (needs_flag) {
+            transport_matrix.matrix_[i][j] = -1;
           } else {
-            transport_matrix.matrix_[i][j] = needs_[needs_i];
-            reserves_[reserves_i] = needs_[needs_i] = 0;
-            reserves_i++; needs_i++;               
+            if (needs_[needs_i] > reserves_[reserves_i]) {
+              transport_matrix.matrix_[i][j] = reserves_[reserves_i];
+              needs_[needs_i] -= reserves_[reserves_i];
+              reserves_[reserves_i] = 0; reserves_i++;
+              needs_flag = 1;
+            } else if (needs_[needs_i] < reserves_[reserves_i]) {
+              transport_matrix.matrix_[i][j] = needs_[needs_i];
+              reserves_[reserves_i] -= needs_[needs_i];
+              needs_[needs_i] = 0; needs_i++; j_start++;          
+            } else {
+              transport_matrix.matrix_[i][j] = needs_[needs_i];
+              reserves_[reserves_i] = needs_[needs_i] = 0;
+              reserves_i++; needs_i++; 
+              needs_flag = 1; j_start++;          
+            }
           }
         }
       }
@@ -574,6 +582,3 @@ void MatrixFractions::TransportTask() {
   }
   std::cout << transport_cost << std::endl;
 }
-
-
-

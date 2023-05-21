@@ -58,7 +58,7 @@ class MatrixFractions {
   int CalculateSLAE();
 
   void GetMatrix(std::string path); 
-  void GetTransportMatrix(std::string path);      
+  void GetTransportMatrix(std::string path);
 
  private:
   int rows_, cols_, posible_bases = 1;
