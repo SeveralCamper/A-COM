@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[]) {
   std::string file_path = "../files/ZLP_1.txt";
-  std::vector<std::vector<SimpleFractions>> matrix = GetInput(file_path);
+  std::vector<std::vector<SimpleFractions>> matrix = GetZLP(file_path);
   std::cout << std::endl;
 
   std::cout << "Изначальные входные данные:" << std::endl;
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 
   matrix.erase(matrix.begin());
 
-  const int Nbegin = matrix[0].size() - 1;
+  const int n_begin = matrix[0].size() - 1;
 
   for (int row = 0; row < matrix.size(); ++row) {
     matrix[row].insert(matrix[row].begin(), matrix[row].back());
@@ -192,15 +192,15 @@ int main(int argc, char *argv[]) {
         std::cout << "X1=(";
       } else
         std::cout << "X=(";
-      std::vector<SimpleFractions> XSol(Nbegin);
+      std::vector<SimpleFractions> n_solution(n_begin);
       for (int i = 0; i < basis.size(); ++i) {
-        if (basis[i] >= 0 && basis[i] <= Nbegin) {
-          XSol[basis[i] - 1] = matrix[i][0];
+        if (basis[i] >= 0 && basis[i] <= n_begin) {
+          n_solution[basis[i] - 1] = matrix[i][0];
         }
       }
-      for (int i = 0; i < XSol.size(); ++i) {
-        std::cout << XSol[i];
-        if (i == XSol.size() - 1)
+      for (int i = 0; i < n_solution.size(); ++i) {
+        std::cout << n_solution[i];
+        if (i == n_solution.size() - 1)
           continue;
         std::cout << ";";
       }
@@ -221,31 +221,31 @@ int main(int argc, char *argv[]) {
         basis[rowIndex] = colIndex;
         matrix = SquareMethod(matrix, rowIndex, colIndex);
         PrintTable(matrix, basis);
-        std::vector<SimpleFractions> XSol2(Nbegin);
+        std::vector<SimpleFractions> m_solution(n_begin);
         std::cout << "X2=(";
         for (int i = 0; i < basis.size(); ++i) {
-          if (basis[i] >= 0 && basis[i] <= Nbegin) {
-            XSol2[basis[i] - 1] = matrix[i][0];
+          if (basis[i] >= 0 && basis[i] <= n_begin) {
+            m_solution[basis[i] - 1] = matrix[i][0];
           }
         }
-        for (int i = 0; i < XSol2.size(); ++i) {
-          std::cout << XSol2[i];
-          if (i == XSol.size() - 1)
+        for (int i = 0; i < m_solution.size(); ++i) {
+          std::cout << m_solution[i];
+          if (i == n_solution.size() - 1)
             continue;
           std::cout << ";";
         }
         std::cout << ")" << std::endl;
         std::cout << "X=(";
-        for (int i = 0; i < Nbegin; ++i) {
-          std::cout << XSol[i];
-          SimpleFractions val = XSol2[i] - XSol[i];
-          if (val > 0)
+        for (int i = 0; i < n_begin; ++i) {
+          std::cout << n_solution[i];
+          SimpleFractions amount_sign = m_solution[i] - n_solution[i];
+          if (amount_sign > 0)
             std::cout << " + ";
-          else if (val < 0)
+          else if (amount_sign < 0)
             std::cout << " - ";
-          if (val != 0)
-            std::cout << val.ABS_sf() << "L";
-          if (i == XSol.size() - 1)
+          if (amount_sign != 0)
+            std::cout << amount_sign.ABS_sf() << "L";
+          if (i == n_solution.size() - 1)
             continue;
           std::cout << ";";
         }

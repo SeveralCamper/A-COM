@@ -113,12 +113,12 @@ void PrintTable(const std::vector<std::vector<SimpleFractions>> &matrix,
 }
 
 std::vector<std::vector<SimpleFractions>> SquareMethod(const std::vector<std::vector<SimpleFractions>> &matrix, int row, int col) {
-  int n = matrix.size();
-  int m = matrix[0].size();
-  std::vector<std::vector<SimpleFractions>> nmatrix(n, std::vector<SimpleFractions>(m));
-  for (int i = 0; i < n; ++i) {
+  int rows_size = matrix.size();
+  int cols_size = matrix[0].size();
+  std::vector<std::vector<SimpleFractions>> nmatrix(rows_size, std::vector<SimpleFractions>(cols_size));
+  for (int i = 0; i < rows_size; ++i) {
     if (i == row) {
-      for (int j = 0; j < m; ++j) {
+      for (int j = 0; j < cols_size; ++j) {
         if (j == col) {
           nmatrix[i][j] = 1;
           continue;
@@ -127,7 +127,7 @@ std::vector<std::vector<SimpleFractions>> SquareMethod(const std::vector<std::ve
       }
       continue;
     }
-    for (int j = 0; j < m; ++j) {
+    for (int j = 0; j < cols_size; ++j) {
       if (j == col) {
         nmatrix[i][j] = 0;
         continue;
@@ -139,21 +139,21 @@ std::vector<std::vector<SimpleFractions>> SquareMethod(const std::vector<std::ve
   return nmatrix;
 }
 
-std::vector<std::vector<SimpleFractions>> SimplexMethod(std::vector<std::vector<SimpleFractions>> matrix, std::vector<int> &basiz,
-              std::vector<bool> fakeCol) {
-  int n = matrix.size();
-  int m = matrix[0].size();
+std::vector<std::vector<SimpleFractions>> SimplexMethod(std::vector<std::vector<SimpleFractions>> matrix, std::vector<int> &basis,
+              std::vector<bool> fake_col) {
+  int rows_size = matrix.size();
+  int cols_size = matrix[0].size();
 
   bool flag = true;
   std::set<int> ignoredColumns;
   while (flag) {
 
     int col = -1;
-    for (int i = 1; i < m; ++i) {
+    for (int i = 1; i < cols_size; ++i) {
       if (ignoredColumns.count(i) > 0)
         continue;
-      if (SimpleFractions(0) > matrix[n - 1][i] &&
-          (col == -1 || matrix[n - 1][col] > matrix[n - 1][i])) {
+      if (SimpleFractions(0) > matrix[rows_size - 1][i] &&
+          (col == -1 || matrix[rows_size - 1][col] > matrix[rows_size - 1][i])) {
         col = i;
       }
     }
@@ -164,8 +164,8 @@ std::vector<std::vector<SimpleFractions>> SimplexMethod(std::vector<std::vector<
     std::vector<SimpleFractions> CO(matrix.size());
     int row = -1;
 
-    for (int i = 0; i < n; ++i) {
-      if (basiz[i] >= 0 && matrix[i][col] > 0) {
+    for (int i = 0; i < rows_size; ++i) {
+      if (basis[i] >= 0 && matrix[i][col] > 0) {
         SimpleFractions val = matrix[i][0] / matrix[i][col];
         CO[i] = val;
         if (row == -1 || CO[row] > val) {
@@ -176,19 +176,19 @@ std::vector<std::vector<SimpleFractions>> SimplexMethod(std::vector<std::vector<
     if (row == -1)
       break;
 
-    PrintTable(matrix, basiz, ignoredColumns, CO, col, row);
+    PrintTable(matrix, basis, ignoredColumns, CO, col, row);
 
     std::vector<std::vector<SimpleFractions>> nmatrix = SquareMethod(matrix, row, col);
 
-    if (fakeCol[basiz[row]]) {
-      ignoredColumns.insert(basiz[row]);
+    if (fake_col[basis[row]]) {
+      ignoredColumns.insert(basis[row]);
     }
-    basiz[row] = col;
+    basis[row] = col;
 
     matrix = nmatrix;
   }
-  std::vector<std::vector<SimpleFractions>> nmatrix(n);
-  for (int i = 0; i < n; ++i) {
+  std::vector<std::vector<SimpleFractions>> nmatrix(rows_size);
+  for (int i = 0; i < rows_size; ++i) {
     for (int j = 0; j < matrix[i].size(); ++j) {
       if (ignoredColumns.count(j) > 0) {
         continue;
@@ -199,19 +199,19 @@ std::vector<std::vector<SimpleFractions>> SimplexMethod(std::vector<std::vector<
   return nmatrix;
 }
 
-std::vector<std::vector<SimpleFractions>> GetInput(std::string filename) {
-  std::vector<std::vector<SimpleFractions>> res;
-  std::ifstream f(filename);
+std::vector<std::vector<SimpleFractions>> GetZLP(std::string filpe_path) {
+  std::vector<std::vector<SimpleFractions>> result;
+  std::ifstream file_path_(filpe_path);
   std::string str;
-  while (getline(f, str)) {
-    std::vector<SimpleFractions> tmp;
-    std::stringstream ss(str);
-    SimpleFractions x;
-    while (ss >> x) {
-      tmp.push_back(x);
+  while (getline(file_path_, str)) {
+    std::vector<SimpleFractions> new_row;
+    std::stringstream string_stream(str);
+    SimpleFractions new_fraction;
+    while (string_stream >> new_fraction) {
+      new_row.push_back(new_fraction);
     }
-    res.push_back(tmp);
+    result.push_back(new_row);
   }
 
-  return res;
+  return result;
 }

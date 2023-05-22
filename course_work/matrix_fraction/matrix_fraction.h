@@ -15,4 +15,4 @@ void PrintTable(const std::vector<std::vector<SimpleFractions>> &matrix,
 std::vector<std::vector<SimpleFractions>> SquareMethod(const std::vector<std::vector<SimpleFractions>> &matrix, int row, int col);
 std::vector<std::vector<SimpleFractions>> SimplexMethod(std::vector<std::vector<SimpleFractions>> matrix, std::vector<int> &basiz,
               std::vector<bool> fakeCol);
-std::vector<std::vector<SimpleFractions>> GetInput(std::string filename);
+std::vector<std::vector<SimpleFractions>> GetZLP(std::string filpe_path);
