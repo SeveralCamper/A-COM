@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
   std::cout << std::endl;
   std::cout << "Определим, могут ли быть базисными переменными какие-то и изначальных:" << std::endl;
 
-  std::vector<int> bazis(matrix.size(), -1);
+  std::vector<int> basis(matrix.size(), -1);
   for (int column = 0; column < matrix[0].size(); ++column) {
     int base_var = -1;
     bool flag = true;
@@ -74,13 +74,13 @@ int main(int argc, char *argv[]) {
       }
     }
     if (flag && base_var >= 0) {
-      if (bazis[base_var] == -1) {
-        bazis[base_var] = column;
+      if (basis[base_var] == -1) {
+        basis[base_var] = column;
       }
     }
   }
 
-  for (auto &i : bazis) {
+  for (auto &i : basis) {
     std::cout << i << ' ';
   }
   std::cout << std::endl;
@@ -89,8 +89,8 @@ int main(int argc, char *argv[]) {
 
   std::vector<SimpleFractions> mTask(matrix[0].size());
 
-  for (int i = 0; i < bazis.size(); ++i) {
-    if (bazis[i] != -1)
+  for (int i = 0; i < basis.size(); ++i) {
+    if (basis[i] != -1)
       continue;
     for (int row = 0; row < matrix.size(); ++row) {
       if (i == row)
@@ -104,12 +104,12 @@ int main(int argc, char *argv[]) {
     for (int j = 0; j < matrix[i].size() - 1; ++j) {
       mTask[j] = mTask[j] - matrix[i][j];
     }
-    bazis[i] = matrix[i].size() - 1;
+    basis[i] = matrix[i].size() - 1;
   }
 
   for (int i = 0; i < matrix.size(); ++i) {
-    if (bazis[i] >= 0 && zRow[bazis[i]] != 0) {
-      int index = bazis[i];
+    if (basis[i] >= 0 && zRow[basis[i]] != 0) {
+      int index = basis[i];
       for (int j = 0; j < zRow.size(); ++j) {
         if (j == index)
           continue;
@@ -122,13 +122,13 @@ int main(int argc, char *argv[]) {
   std::cout << std::endl;
   std::cout << "После введения искусственных переменных получаем новый базис:" << std::endl;
 
-  for (auto &i : bazis) {
+  for (auto &i : basis) {
     std::cout << i << ' ';
   }
   std::cout << std::endl;
 
-  bazis.push_back(-1);
-  bazis.push_back(-1);
+  basis.push_back(-1);
+  basis.push_back(-1);
 
   matrix.push_back(zRow);
   matrix.push_back(mTask);
@@ -136,15 +136,15 @@ int main(int argc, char *argv[]) {
   std::cout << std::endl;
   std::cout << "Выразим сумму искуственных переменных из системы ограничений и запишем расширенную симплекс-таблицу:" << std::endl << std::endl;
 
-  PrintTable(matrix, bazis);
+  PrintTable(matrix, basis);
 
-  matrix = SimplexMethod(matrix, bazis, extended_columns);
+  matrix = SimplexMethod(matrix, basis, extended_columns);
 
   bool flag = true;
   for (int i = 0; i < extended_columns.size(); ++i) {
     if (extended_columns[i]) {
-      for (int j = 0; j < bazis.size(); ++j) {
-        if (bazis[j] == i) {
+      for (int j = 0; j < basis.size(); ++j) {
+        if (basis[j] == i) {
           flag = false;
           break;
         }
@@ -159,44 +159,43 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  PrintTable(matrix, bazis);
+  PrintTable(matrix, basis);
 
   if (flag) {
-    std::cout << "Sovmestno" << std::endl;
+    std::cout << "Исходная задача совместна" << std::endl;
     matrix.erase(matrix.begin() + matrix.size() - 1);
-    PrintTable(matrix, bazis);
-    matrix = SimplexMethod(matrix, bazis, extended_columns);
-    PrintTable(matrix, bazis);
-    int mnoga = -1;
+    matrix = SimplexMethod(matrix, basis, extended_columns);
+    PrintTable(matrix, basis);
+    int quantity_of_solutions = -1;
     for (int i = 1; i < matrix[0].size(); ++i) {
       if (matrix.back()[i] < 0) {
         flag = false;
         break;
       } else if (matrix.back()[i] == 0) {
-        bool inbasiz = false;
-        for (auto &x : bazis) {
+        bool in_basis = false;
+        for (auto &x : basis) {
           if (x == i) {
-            inbasiz = true;
+            in_basis = true;
             break;
           }
         }
-        if (!inbasiz) {
-          mnoga = i;
+        if (!in_basis) {
+          quantity_of_solutions = i;
         }
       }
     }
 
     if (flag) {
-      std::cout << "Sovmestno!" << std::endl;
-      if (mnoga >= 0) {
-        std::cout << "Neskolko resheniy" << std::endl;
+      std::cout << "Исходная задача совместна - имеет 1 или более решений" << std::endl;
+      if (quantity_of_solutions >= 0) {
+        std::cout << "Исходная задача имеет несколько решений" << std::endl;
         std::cout << "X1=(";
       } else
         std::cout << "X=(";
       std::vector<SimpleFractions> XSol(Nbegin);
-      for (int i = 0; i < bazis.size(); ++i) {
-        if (bazis[i] >= 0 && bazis[i] <= Nbegin) {
-          XSol[bazis[i] - 1] = matrix[i][0];
+      for (int i = 0; i < basis.size(); ++i) {
+        if (basis[i] >= 0 && basis[i] <= Nbegin) {
+          XSol[basis[i] - 1] = matrix[i][0];
         }
       }
       for (int i = 0; i < XSol.size(); ++i) {
@@ -206,8 +205,8 @@ int main(int argc, char *argv[]) {
         std::cout << ";";
       }
       std::cout << ")" << std::endl;
-      if (mnoga >= 0) {
-        int colIndex = mnoga;
+      if (quantity_of_solutions >= 0) {
+        int colIndex = quantity_of_solutions;
         int rowIndex = -1;
         std::vector<SimpleFractions> CO(matrix.size());
         for (int i = 0; i < matrix.size() - 1; ++i) {
@@ -218,15 +217,15 @@ int main(int argc, char *argv[]) {
             }
           }
         }
-        PrintTable(matrix, bazis, {}, CO, colIndex, rowIndex);
-        bazis[rowIndex] = colIndex;
+        PrintTable(matrix, basis, {}, CO, colIndex, rowIndex);
+        basis[rowIndex] = colIndex;
         matrix = SquareMethod(matrix, rowIndex, colIndex);
-        PrintTable(matrix, bazis);
+        PrintTable(matrix, basis);
         std::vector<SimpleFractions> XSol2(Nbegin);
         std::cout << "X2=(";
-        for (int i = 0; i < bazis.size(); ++i) {
-          if (bazis[i] >= 0 && bazis[i] <= Nbegin) {
-            XSol2[bazis[i] - 1] = matrix[i][0];
+        for (int i = 0; i < basis.size(); ++i) {
+          if (basis[i] >= 0 && basis[i] <= Nbegin) {
+            XSol2[basis[i] - 1] = matrix[i][0];
           }
         }
         for (int i = 0; i < XSol2.size(); ++i) {
@@ -255,10 +254,10 @@ int main(int argc, char *argv[]) {
       std::cout << "Z(X)=" << matrix.back()[0] << std::endl;
 
     } else {
-      std::cout << "Ne ogranichena	" << std::endl;
+      std::cout << "Исходная задача имеет бесконечное множество решений" << std::endl;
     }
   } else {
-    std::cout << "Ne sovmestno" << std::endl;
+    std::cout << "Исходная задача несовместна - не имеет ни одного решения" << std::endl;
   }
 
   return 0;
