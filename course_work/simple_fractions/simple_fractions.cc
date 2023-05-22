@@ -29,9 +29,9 @@ SimpleFractions::SimpleFractions(const SimpleFractions &x) {
 }
 
 void SimpleFractions::Simplify() {
-  long long c = NOD(ABS_ll(numerator_), ABS_ll(denominator_));
-  numerator_ /= c;
-  denominator_ /= c;
+  long long sNOD = NOD(ABS_ll(numerator_), ABS_ll(denominator_));
+  numerator_ /= sNOD;
+  denominator_ /= sNOD;
 }
 
 SimpleFractions SimpleFractions::operator+(const SimpleFractions &x) const {
