@@ -1,12 +1,12 @@
 #pragma once
 
-#include <fstream>
-#include <iomanip>
-#include <iostream>
 #include <set>
-#include <sstream>
 #include <string>
 #include <vector>
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include <iostream>
 
 class SimpleFractions {
 private:

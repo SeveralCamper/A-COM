@@ -1,11 +1,3 @@
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <set>
-#include <sstream>
-#include <string>
-#include <vector>
-
 #include "matrix_fraction/matrix_fraction.h"
 
 int main(int argc, char *argv[]) {
